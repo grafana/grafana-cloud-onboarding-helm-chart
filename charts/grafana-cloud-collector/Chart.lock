@@ -1,0 +1,9 @@
+dependencies:
+- name: alloy-operator
+  repository: https://grafana.github.io/helm-charts
+  version: 0.2.9
+- name: additional-components
+  repository: ""
+  version: 1.0.0
+digest: sha256:d4c73d93876b828c1861232fa95810fceeba11bdc87e33fbb692690ba9f561a1
+generated: "2025-06-04T17:20:10.126066-05:00"

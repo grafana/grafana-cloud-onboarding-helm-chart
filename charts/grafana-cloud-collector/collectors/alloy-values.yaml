@@ -1,0 +1,7 @@
+---
+attributes: {}
+
+# Skip installation of the Grafana Alloy CRDs, since we don't use them in this chart
+# @ignored
+crds:
+  create: false

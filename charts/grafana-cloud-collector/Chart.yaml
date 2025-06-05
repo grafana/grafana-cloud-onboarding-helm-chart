@@ -1,0 +1,15 @@
+apiVersion: v2
+name: grafana-cloud-collector
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+appVersion: 1.16.0
+dependencies:
+  - name: alloy-operator
+    version: 0.2.9
+    repository: https://grafana.github.io/helm-charts
+    condition: alloy-operator.enabled
+  - alias: additionalComponents
+    name: additional-components
+    version: 1.0.0
+    repository: ""

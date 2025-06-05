@@ -1,0 +1,13 @@
+# kube-state-metrics is for...
+kube-state-metrics:
+  enabled: false
+
+# node-exporter is for...
+node-exporter:
+  enabled: false
+
+windows-exporter:
+  enabled: false
+
+kepler:
+  enabled: false

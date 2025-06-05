@@ -1,0 +1,55 @@
+# helm install --set cluster.name=$(kubectl config current-context)
+cluster:
+  name: ""
+
+# Connection information for Grafana Cloud Services
+grafanaCloud:
+  # Fleet Management for fetching Alloy configuration remotely
+  fleetManagement:
+    url: https://fleet.grafana.com
+    auth:
+      type: basic
+      username: 123456
+      password: glc_thisismypassword
+
+  # v2: Collector Manager for fetching Alloy instance definitions remotely
+  collectorManager:
+    enabled: true
+    url: https://collector-manager.grafana.com
+
+# The list of collectors to deploy. This is an object, so you can define multiple collectors.
+# Supports all fields from the Alloy CRD (which is also the Alloy Helm chart).
+collectors:
+  alloy-starter:
+    # Additional attributes to send to fleet management and collector manager.
+    attributes: {}
+    controller:
+      securityContext:
+        hostPID: true
+
+# Extra components to deploy to the cluster to provide additional metric sources.
+additionalComponents:
+  # kube-state-metrics is for...
+  kube-state-metrics:
+    enabled: true
+
+  # node-exporter is for...
+  node-exporter:
+    enabled: true
+
+  windows-exporter:
+    enabled: true
+
+  kepler:
+    enabled: true
+
+#  cloud-cost-exporter:
+#    enabled: true
+
+# Configuration options for the Alloy Operator.
+alloyOperator:
+  enabled: true
+
+global: {}
+
+extraManifests: []

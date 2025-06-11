@@ -12,10 +12,10 @@ grafanaCloud:
       username: 123456
       password: glc_thisismypassword
 
-  # v2: Collector Manager for fetching Alloy instance definitions remotely
-  collectorManager:
-    enabled: true
-    url: https://collector-manager.grafana.com
+  # v2 in the future: Collector Manager for fetching Alloy instance definitions remotely
+  # collectorManager:
+  #   enabled: true
+  #   url: https://collector-manager.grafana.com
 
 # The list of collectors to deploy. This is an object, so you can define multiple collectors.
 # Supports all fields from the Alloy CRD (which is also the Alloy Helm chart).
@@ -43,7 +43,8 @@ additionalComponents:
   kepler:
     enabled: true
 
-#  cloud-cost-exporter:
+# TODO: add it in when ready to use
+# cloud-cost-exporter:
 #    enabled: true
 
 # Configuration options for the Alloy Operator.

@@ -1,0 +1,12 @@
+suite: Test alloy CRD configuration
+
+templates:
+  - alloy.yaml
+
+tests:
+  - it: should create alloy CRD with correct kind
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Alloy

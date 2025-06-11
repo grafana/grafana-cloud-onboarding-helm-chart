@@ -1,0 +1,22 @@
+version: "3"
+
+tasks:
+  install-deps:
+    desc: Install required dependencies
+    cmds:
+      - helm plugin install https://github.com/quintush/helm-unittest
+
+  test:
+    desc: Run all tests
+    cmds:
+      - task: unittest
+
+  unittest:
+    desc: Run unit tests for the Helm chart
+    cmds:
+      - helm unittest charts/grafana-cloud-collector
+
+  lint:
+    desc: Lint the Helm chart
+    cmds:
+      - helm lint charts/grafana-cloud-collector

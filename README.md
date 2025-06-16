@@ -7,12 +7,12 @@ Status: Work in progress
 
 ## Dependencies
 
-- Helm: https://helm.sh/
-- Taskfile: https://taskfile.dev
+- Helm: <https://helm.sh/>
+- Taskfile: <https://taskfile.dev>
 
-## Running unit tests
+## Running tests
 
-```
+```shell
 task test
 ```
 

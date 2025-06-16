@@ -1,0 +1,19 @@
+---
+enable-beta-ecosystems: true  # Enables Helm dependency checking
+
+version: 2
+updates:
+  - package-ecosystem: helm
+    directory: /charts/grafana-cloud-collector
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
+      - helm
+  - package-ecosystem: helm
+    directory: /charts/grafana-cloud-collector/charts/additional-components
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
+      - helm

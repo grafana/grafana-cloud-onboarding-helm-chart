@@ -12,6 +12,14 @@ grafanaCloud:
       username: 123456
       password: glc_thisismypassword
 
+    # -- The frequency at which to poll the remote config server for updates.
+    # @section -- Remote Configuration
+    pollFrequency: 5m
+
+    # -- Attributes to be added to this collector when requesting configuration.
+    # @section -- Remote Configuration
+    extraAttributes: {}
+
   # v2 in the future: Collector Manager for fetching Alloy instance definitions remotely
   # collectorManager:
   #   enabled: true

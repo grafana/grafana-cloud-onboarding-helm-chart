@@ -11,8 +11,7 @@ workloadType: {{ .collectorValues.controller.type }}
 {{- /* Builds the alloy config for remoteConfig */ -}}
 {{- define "collectors.remoteConfig.alloy" }}
 {{- with merge .Values.grafanaCloud.fleetManagement (dict "type" "fleetManagement" "name" "fleet-management") }}
-  {{- $attributes := (include "collectors.remoteConfig.defaultAttributes" $ | fromYaml )}}
-  {{- mergeOverwrite $attributes .extraAttributes (index $.collectorValues "attributes") }}
+  {{- $attributes := (include "collectors.remoteConfig.defaultAttributes" $ | fromYaml) | merge .extraAttributes (index $.collectorValues "attributes") }}
   {{- if eq (include "secrets.usesKubernetesSecret" .) "true" }}
     {{- include "secret.alloy" (deepCopy $ | merge (dict "object" .)) | nindent 0 }}
   {{- end }}

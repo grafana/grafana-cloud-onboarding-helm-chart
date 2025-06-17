@@ -39,8 +39,8 @@ app.kubernetes.io/instance: {{ include "collector.alloy.fullname" . }}
 
 {{- /* Gets the Alloy values. Input: $, .collectorName (string, collector name), .collectorValues (object) */ -}}
 {{- define "collector.alloy.values" -}}
-{{- $defaultValues := "collectors/alloy-values.yaml" | .Files.Get | fromYaml }}
 {{- $upstreamValues := "collectors/upstream/alloy-values.yaml" | .Files.Get | fromYaml }}
+{{- $defaultValues := "collectors/alloy-values.yaml" | .Files.Get | fromYaml }}
 {{- $globalValues := include "collector.alloy.values.global" . | fromYaml }}
 {{- $userValues := $.collectorValues }}
 {{- if not $.collectorValues }}

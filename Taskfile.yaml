@@ -1,15 +1,22 @@
 version: "3"
 
 tasks:
-  install-deps:
-    desc: Install required dependencies
+  install-plugins:
+    desc: Install required plugins
     cmds:
-      - helm plugin install https://github.com/quintush/helm-unittest
+      - helm plugin install https://github.com/quintush/helm-unittest || echo "Plugin already installed, skipping."
+
+  update-deps:
+    desc: Update the dependencies
+    dir: charts/grafana-cloud-collector
+    cmds:
+      - helm dependency update
 
   test:
     desc: Run all tests
     cmds:
       - task: unittest
+      - task: test-golden-records
 
   unittest:
     desc: Run unit tests for the Helm chart
@@ -20,3 +27,43 @@ tasks:
     desc: Lint the Helm chart
     cmds:
       - helm lint charts/grafana-cloud-collector
+
+  generate:
+    desc: Generate all the generated content
+    cmds:
+      - task: generate-golden-records
+
+  generate-golden-records:
+    desc: Generate golden record result files from values files
+    cmds:
+      - |
+        find charts/grafana-cloud-collector/tests/goldenrecords -name "*_values.yaml" \
+          -exec sh -c '
+            values_file="{}"
+            result_file="${values_file%_values.yaml}_result.yaml"
+            echo "Generating $result_file from $values_file"
+            helm template test ./charts/grafana-cloud-collector -f "$values_file" > "$result_file"
+          ' \;
+
+  test-golden-records:
+    desc: Verify that generated golden records match existing ones
+    cmds:
+      - |
+        find charts/grafana-cloud-collector/tests/goldenrecords -name "*_values.yaml" \
+          -exec sh -c '
+            values_file="{}"
+            result_file="${values_file%_values.yaml}_result.yaml"
+            temp_file=$(mktemp)
+            
+            echo "Verifying $result_file..."
+            helm template test ./charts/grafana-cloud-collector -f "$values_file" > "$temp_file"
+            
+            if ! diff -u "$result_file" "$temp_file"; then
+              echo "Error: Generated content does not match golden record for $result_file"
+              rm "$temp_file"
+              exit 1
+            fi
+            
+            rm "$temp_file"
+          ' \;
+      - 'echo Test completed'

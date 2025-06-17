@@ -1,10 +1,13 @@
 suite: Test alloy CRD configuration
 
-templates:
-  - alloy.yaml
-
 tests:
   - it: should create alloy CRD with correct kind
+    values:
+      - './values/empty.yaml'
+    template: 'alloy.yaml'
+    documentSelector:
+      path: metadata.kind
+      value: Alloy
     asserts:
       - hasDocuments:
           count: 1

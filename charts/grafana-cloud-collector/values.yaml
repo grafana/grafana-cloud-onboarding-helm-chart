@@ -16,7 +16,7 @@ grafanaCloud:
     # @section -- Remote Configuration
     pollFrequency: 5m
 
-    # -- Attributes to be added to this collector when requesting configuration.
+    # -- Attributes to be added to all collectors when requesting configuration.
     # @section -- Remote Configuration
     extraAttributes: {}
 

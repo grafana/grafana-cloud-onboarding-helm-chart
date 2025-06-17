@@ -16,4 +16,4 @@ jobs:
           version: "3.x"
 
       - name: Run tests
-        run: task test
+        run: task install-plugins test

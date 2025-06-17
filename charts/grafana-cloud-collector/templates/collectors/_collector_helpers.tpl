@@ -39,24 +39,22 @@ app.kubernetes.io/instance: {{ include "collector.alloy.fullname" . }}
 
 {{- /* Gets the Alloy values. Input: $, .collectorName (string, collector name), .collectorValues (object) */ -}}
 {{- define "collector.alloy.values" -}}
-{{- $defaultValues := "collectors/alloy-values.yaml" | .Files.Get | fromYaml }}
 {{- $upstreamValues := "collectors/upstream/alloy-values.yaml" | .Files.Get | fromYaml }}
+{{- $defaultValues := "collectors/alloy-values.yaml" | .Files.Get | fromYaml }}
 {{- $globalValues := include "collector.alloy.values.global" . | fromYaml }}
 {{- $userValues := $.collectorValues }}
 {{- if not $.collectorValues }}
   {{- $userValues = (index $.Values.collectors .collectorName) }}
 {{- end }}
-{{ mergeOverwrite $upstreamValues $defaultValues $globalValues $userValues | toYaml }}
+{{- $alloyValues := mergeOverwrite $upstreamValues $defaultValues $globalValues $userValues }}
+{{- $alloyConfigContent := include "collectors.remoteConfig.alloy" (deepCopy $ | merge (dict "collectorName" .collectorName "collectorValues" $alloyValues)) }}
+{{- $alloyConfigContent = regexReplaceAll `[ \t]+(\r?\n)` $alloyConfigContent "\n" | trim }}
+{{- $alloyConfig := dict "alloy" (dict "configMap" (dict "content" $alloyConfigContent)) }}
+{{ mergeOverwrite $alloyValues $alloyConfig | toYaml }}
 {{- end }}
 
 {{/* Lists the fields that are not a part of Alloy itself, and should be removed before creating an Alloy instance. */}}
 {{/* Inputs: (none) */}}
 {{- define "collector.alloy.extraFields" }}
 - attributes
-{{/*- extraConfig*/}}
-{{/*- extraService*/}}
-{{/*- includeDestinations*/}}
-{{/*- liveDebugging*/}}
-{{/*- logging*/}}
-{{/*- remoteConfig*/}}
 {{- end }}

@@ -1,6 +1,17 @@
-{- /* Builds the alloy config for remoteConfig */ -}}
-{{- define "collectors.remoteConfig.alloy" -}}
+{{- define "collectors.remoteConfig.defaultAttributes" }}
+platform: kubernetes
+source: {{ .Chart.Name }}
+sourceVersion: {{ .Chart.Version }}
+release: {{ .Release.Name }}
+namespace: {{ .Release.Namespace }}
+workloadName: {{ .collectorName }}
+workloadType: {{ .collectorValues.controller.type }}
+{{- end }}
+
+{{- /* Builds the alloy config for remoteConfig */ -}}
+{{- define "collectors.remoteConfig.alloy" }}
 {{- with merge .Values.grafanaCloud.fleetManagement (dict "type" "fleetManagement" "name" "fleet-management") }}
+  {{- $attributes := (include "collectors.remoteConfig.defaultAttributes" $ | fromYaml) | merge .extraAttributes (index $.collectorValues "attributes") }}
   {{- if eq (include "secrets.usesKubernetesSecret" .) "true" }}
     {{- include "secret.alloy" (deepCopy $ | merge (dict "object" .)) | nindent 0 }}
   {{- end }}
@@ -31,15 +42,7 @@ remotecfg {
 {{- end }}
   poll_frequency = {{ .pollFrequency | quote }}
   attributes = {
-    "platform" = "kubernetes",
-    "source" = "{{ $.Chart.Name }}",
-    "sourceVersion" = "{{ $.Chart.Version }}",
-    "release" = "{{ $.Release.Name }}",
-    "cluster" = {{ $.Values.cluster.name | quote }},
-    "namespace" = {{ $.Release.Namespace | quote }},
-{{/*    "workloadName" = {{ $.collectorName | quote }},*/}}
-{{/*    "workloadType" = {{ $collectorValues.controller.type | quote }},*/}}
-{{- range $key, $value := .extraAttributes }}
+{{- range $key, $value := $attributes }}
     {{ $key | quote }} = {{ $value | quote }},
 {{- end }}
   }
@@ -47,7 +50,7 @@ remotecfg {
   {{- end -}}
 {{- end -}}
 
-{{- define "secrets.list.remoteConfig" -}}
+{{- define "secrets.list.fleetManagement" -}}
 - auth.username
 - auth.password
 {{- end -}}

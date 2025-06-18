@@ -37,33 +37,31 @@ tasks:
     desc: Generate golden record result files from values files
     cmds:
       - |
-        find charts/grafana-cloud-collector/tests/goldenrecords -name "*_values.yaml" \
-          -exec sh -c '
-            values_file="{}"
-            result_file="${values_file%_values.yaml}_result.yaml"
-            echo "Generating $result_file from $values_file"
-            helm template test ./charts/grafana-cloud-collector -f "$values_file" > "$result_file"
-          ' \;
+        set -e
+        for values_file in charts/grafana-cloud-collector/tests/goldenrecords/*_values.yaml; do
+          result_file="${values_file%_values.yaml}_result.yaml"
+          echo "Generating $result_file from $values_file"
+          helm template test ./charts/grafana-cloud-collector -f "$values_file" -n test-namespace > "$result_file"
+        done
 
   test-golden-records:
     desc: Verify that generated golden records match existing ones
     cmds:
       - |
-        find charts/grafana-cloud-collector/tests/goldenrecords -name "*_values.yaml" \
-          -exec sh -c '
-            values_file="{}"
-            result_file="${values_file%_values.yaml}_result.yaml"
-            temp_file=$(mktemp)
-            
-            echo "Verifying $result_file..."
-            helm template test ./charts/grafana-cloud-collector -f "$values_file" > "$temp_file"
-            
-            if ! diff -u "$result_file" "$temp_file"; then
-              echo "Error: Generated content does not match golden record for $result_file"
-              rm "$temp_file"
-              exit 1
-            fi
-            
+        set -e
+        for values_file in charts/grafana-cloud-collector/tests/goldenrecords/*_values.yaml; do
+          result_file="${values_file%_values.yaml}_result.yaml"
+          temp_file=$(mktemp)
+          
+          echo "Verifying $result_file..."
+          helm template test ./charts/grafana-cloud-collector -f "$values_file" -n test-namespace > "$temp_file"
+          
+          if ! diff -u "$result_file" "$temp_file"; then
+            echo "Error: Generated content does not match golden record for $result_file"
             rm "$temp_file"
-          ' \;
+            exit 1
+          fi
+          
+          rm "$temp_file"
+        done
       - 'echo Test completed'

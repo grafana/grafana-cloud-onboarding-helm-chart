@@ -40,14 +40,19 @@ app.kubernetes.io/instance: {{ include "collector.alloy.fullname" . }}
 {{- define "collector.alloy.loggingConfig" -}}
 {{- if .collectorValues.logging }}
 logging {
+{{- if .collectorValues.logging.level }}
   level = {{ .collectorValues.logging.level }}
+{{- end }}
+{{- if .collectorValues.logging.format }}
+  format = {{ .collectorValues.logging.format }}
+{{- end }}
 }
 {{- end }}
 {{- end }}
 
 {{- define "collector.alloy.liveDebuggingConfig" -}}
 {{- if .collectorValues.liveDebugging }}
-live_debugging {
+livedebugging {
   enabled = {{ .collectorValues.liveDebugging.enabled }}
 }
 {{- end }}

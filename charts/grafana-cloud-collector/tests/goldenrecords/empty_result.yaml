@@ -1247,7 +1247,7 @@ spec:
         logging {
           level = info
         }
-        live_debugging {
+        livedebugging {
           enabled = true
         }
       create: true

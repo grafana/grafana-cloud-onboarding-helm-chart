@@ -37,6 +37,27 @@ app.kubernetes.io/instance: {{ include "collector.alloy.fullname" . }}
 {{- $globalValues | toYaml }}
 {{- end }}
 
+{{- define "collector.alloy.loggingConfig" -}}
+{{- if .collectorValues.logging }}
+logging {
+{{- if .collectorValues.logging.level }}
+  level = {{ .collectorValues.logging.level }}
+{{- end }}
+{{- if .collectorValues.logging.format }}
+  format = {{ .collectorValues.logging.format }}
+{{- end }}
+}
+{{- end }}
+{{- end }}
+
+{{- define "collector.alloy.liveDebuggingConfig" -}}
+{{- if .collectorValues.liveDebugging }}
+livedebugging {
+  enabled = {{ .collectorValues.liveDebugging.enabled }}
+}
+{{- end }}
+{{- end }}
+
 {{- /* Gets the Alloy values. Input: $, .collectorName (string, collector name), .collectorValues (object) */ -}}
 {{- define "collector.alloy.values" -}}
 {{- $upstreamValues := "collectors/upstream/alloy-values.yaml" | .Files.Get | fromYaml }}
@@ -48,6 +69,9 @@ app.kubernetes.io/instance: {{ include "collector.alloy.fullname" . }}
 {{- end }}
 {{- $alloyValues := mergeOverwrite $upstreamValues $defaultValues $globalValues $userValues }}
 {{- $alloyConfigContent := include "collectors.remoteConfig.alloy" (deepCopy $ | merge (dict "collectorName" .collectorName "collectorValues" $alloyValues)) }}
+{{- $loggingConfig := include "collector.alloy.loggingConfig" (deepCopy $ | merge (dict "collectorName" .collectorName "collectorValues" $alloyValues)) }}
+{{- $liveDebuggingConfig := include "collector.alloy.liveDebuggingConfig" (deepCopy $ | merge (dict "collectorName" .collectorName "collectorValues" $alloyValues)) }}
+{{- $alloyConfigContent = cat $alloyConfigContent $loggingConfig $liveDebuggingConfig }}
 {{- $alloyConfigContent = regexReplaceAll `[ \t]+(\r?\n)` $alloyConfigContent "\n" | trim }}
 {{- $alloyConfig := dict "alloy" (dict "configMap" (dict "content" $alloyConfigContent)) }}
 {{ mergeOverwrite $alloyValues $alloyConfig | toYaml }}
@@ -57,4 +81,6 @@ app.kubernetes.io/instance: {{ include "collector.alloy.fullname" . }}
 {{/* Inputs: (none) */}}
 {{- define "collector.alloy.extraFields" }}
 - attributes
+- logging
+- liveDebugging
 {{- end }}

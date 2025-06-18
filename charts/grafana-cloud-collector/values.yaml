@@ -1,5 +1,6 @@
-# helm install --set cluster.name=$(kubectl config current-context)
 cluster:
+  # Required. This is used to identify the cluster in Grafana Cloud.
+  # You can use helm install --set cluster.name=$(kubectl config current-context) to set the name matching your kubeconfig.
   name: ""
 
 # Connection information for Grafana Cloud Services
@@ -20,34 +21,43 @@ grafanaCloud:
     # @section -- Remote Configuration
     extraAttributes: {}
 
-  # v2 in the future: Collector Manager for fetching Alloy instance definitions remotely
-  # collectorManager:
-  #   enabled: true
-  #   url: https://collector-manager.grafana.com
-
 # The list of collectors to deploy. This is an object, so you can define multiple collectors.
 # Supports all fields from the Alloy CRD (which is also the Alloy Helm chart).
 collectors:
-  alloy-starter:
-    # Additional attributes to send to fleet management and collector manager.
+  alloy-daemon:
+    # Additional attributes to send to Fleet Management.
     attributes: {}
+    # Logging configuration for Alloy
+    logging:
+      level: "info"
+    # Live debugging configuration for Alloy
+    liveDebugging:
+      enabled: true
+    # Stability level for Alloy
+    stabilityLevel: "public-preview"
     controller:
       securityContext:
         hostPID: true
 
 # Extra components to deploy to the cluster to provide additional metric sources.
 additionalComponents:
-  # kube-state-metrics is for...
+  # kube-state-metrics can be used to get metrics about the state of the kubernetes cluster health and performance.
+  # Installed by default, so you can dynamically enable or disable it through Fleet Management remote configuration.
   kube-state-metrics:
     enabled: true
 
-  # node-exporter is for...
+  # node-exporter is used to collect metrics about the health and performance of Linux nodes in the cluster.
+  # Installed by default, so you can dynamically enable or disable it through Fleet Management remote configuration.
   node-exporter:
     enabled: true
 
+  # windows-exporter is used to collect metrics about the health and performance of Windows nodes in the cluster.
+  # Installed by default, so you can dynamically enable or disable it through Fleet Management remote configuration.
   windows-exporter:
     enabled: true
 
+  # kepler is used to collect metrics about power usage of kubenetes cluster resources.
+  # Installed by default, so you can dynamically enable or disable it through Fleet Management remote configuration.
   kepler:
     enabled: true
 

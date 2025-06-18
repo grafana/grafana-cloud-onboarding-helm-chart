@@ -1212,7 +1212,7 @@ spec:
 apiVersion: collectors.grafana.com/v1alpha1
 kind: Alloy
 metadata:
-  name: test-alloy-starter
+  name: test-alloy-daemon
   namespace: test-namespace
 spec: 
   alloy:
@@ -1240,9 +1240,15 @@ spec:
             "release" = "test",
             "source" = "grafana-cloud-collector",
             "sourceVersion" = "0.1.0",
-            "workloadName" = "alloy-starter",
+            "workloadName" = "alloy-daemon",
             "workloadType" = "daemonset",
           }
+        }
+        logging {
+          level = info
+        }
+        live_debugging {
+          enabled = true
         }
       create: true
       key: null
@@ -1376,7 +1382,7 @@ spec:
     path: /
     pathType: Prefix
     tls: []
-  nameOverride: alloy-starter
+  nameOverride: alloy-daemon
   rbac:
     create: true
   service:
@@ -1399,3 +1405,4 @@ spec:
     metricRelabelings: []
     relabelings: []
     tlsConfig: {}
+  stabilityLevel: public-preview

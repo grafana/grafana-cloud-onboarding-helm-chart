@@ -19,11 +19,9 @@ task test
 ## TODO
 
 - [ ] Name of the repo `grafana-cloud-onboarding-helm-chart` vs. name of the chart `grafana-cloud-collector` - pick one name for both?
-- [ ] `alloy-starter` as the default Alloy installation name - come up with something better?
+- [ ] Add a golden record test for Alloy CR
 - [ ] Documentation for values.yaml
 - [ ] More examples
-- [ ] GH actions CI
 - [ ] More unit tests
 - [ ] Integration tests
 - [ ] Platform tests
-- [ ] Protect main branch and require PR review workflow

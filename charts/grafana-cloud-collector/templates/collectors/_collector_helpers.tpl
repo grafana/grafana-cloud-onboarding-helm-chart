@@ -41,10 +41,10 @@ app.kubernetes.io/instance: {{ include "collector.alloy.fullname" . }}
 {{- if .collectorValues.logging }}
 logging {
 {{- if .collectorValues.logging.level }}
-  level = {{ .collectorValues.logging.level }}
+  level = {{ .collectorValues.logging.level | quote }}
 {{- end }}
 {{- if .collectorValues.logging.format }}
-  format = {{ .collectorValues.logging.format }}
+  format = {{ .collectorValues.logging.format | quote }}
 {{- end }}
 }
 {{- end }}

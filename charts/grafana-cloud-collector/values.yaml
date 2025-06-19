@@ -27,17 +27,14 @@ collectors:
   alloy-daemon:
     # Additional attributes to send to Fleet Management.
     attributes: {}
-    # Logging configuration for Alloy
-    logging:
-      level: "info"
-    # Live debugging configuration for Alloy
-    liveDebugging:
-      enabled: true
-    # Stability level for Alloy
-    stabilityLevel: "public-preview"
-    controller:
+    alloy:
+      # storagePath: /var/log/alloy # TODO: use the varlogs mount to persist alloy data
+      mounts:
+        varlog: true
       securityContext:
-        hostPID: true
+        privileged: true
+    controller:
+      hostPID: true
 
 # Extra components to deploy to the cluster to provide additional metric sources.
 additionalComponents:

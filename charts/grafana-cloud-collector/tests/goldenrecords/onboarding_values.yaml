@@ -1,0 +1,16 @@
+cluster:
+  name: "alloy-example"
+
+collectors:
+  alloy-daemon:
+    image: # Need to use the one that understands the latest Beyla configs.
+      repository: "grafana/alloy-dev"
+      tag: "v1.10.0-devel-5126d5f"
+    logging:
+      level: "debug"
+    liveDebugging:
+      enabled: false
+    alloy:
+      stabilityLevel: "experimental"
+      mounts:
+        dockercontainers: true

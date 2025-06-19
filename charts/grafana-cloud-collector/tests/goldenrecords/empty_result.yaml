@@ -1245,7 +1245,7 @@ spec:
           }
         }
         logging {
-          level = info
+          level = "info"
         }
         livedebugging {
           enabled = true

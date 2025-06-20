@@ -1290,7 +1290,7 @@ spec:
     securityContext:
       privileged: true
     stabilityLevel: public-preview
-    storagePath: /var/log/alloy-daemon-data
+    storagePath: /tmp/alloy
     uiPathPrefix: /
   configReloader:
     customArgs: []

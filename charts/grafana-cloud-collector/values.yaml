@@ -28,8 +28,8 @@ collectors:
     # Additional attributes to send to Fleet Management.
     attributes: {}
     alloy:
-      # Use the varlogs mount to persist alloy data
-      storagePath: /var/log/alloy-daemon-data
+      # TODO: we should have a place to store positions files and FM cache?
+      # storagePath: /var/log/alloy-daemon-data ?
       mounts:
         varlog: true
       securityContext:

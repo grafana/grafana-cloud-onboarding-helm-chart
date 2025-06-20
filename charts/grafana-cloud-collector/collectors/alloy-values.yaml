@@ -2,13 +2,14 @@
 attributes: {}
 
 alloy:
-  # Stability level for Alloy
+  # Default to public-preview stability level
   stabilityLevel: "public-preview"
 
-# Logging configuration for Alloy
+# Log on info level
 logging:
   level: "info"
-# Live debugging configuration for Alloy
+
+# Enable live debugging
 liveDebugging:
   enabled: true
 

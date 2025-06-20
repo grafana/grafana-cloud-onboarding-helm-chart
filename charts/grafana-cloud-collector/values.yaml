@@ -28,7 +28,8 @@ collectors:
     # Additional attributes to send to Fleet Management.
     attributes: {}
     alloy:
-      # storagePath: /var/log/alloy # TODO: use the varlogs mount to persist alloy data
+      # Use the varlogs mount to persist alloy data
+      storagePath: /var/log/alloy-daemon-data
       mounts:
         varlog: true
       securityContext:

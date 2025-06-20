@@ -68,6 +68,36 @@ livedebugging {
   {{- $userValues = (index $.Values.collectors .collectorName) }}
 {{- end }}
 {{- $alloyValues := mergeOverwrite $upstreamValues $defaultValues $globalValues $userValues }}
+
+{{- /* Prepend built-in environment variables to extraEnv */ -}}
+{{- $clusterNameEnv := list (dict "name" "CLUSTER_NAME" "value" $.Values.cluster.name) }}
+{{- $fleetManagementObject := merge .Values.grafanaCloud.fleetManagement (dict "type" "fleetManagement" "name" "fleet-management") }}
+
+{{- /* Determine the GCLOUD_RW_API_KEY environment variable */ -}}
+{{- $gcloudApiKeyEnv := list }}
+{{- if eq (include "secrets.usesKubernetesSecret" $fleetManagementObject) "true" }}
+  {{- $secretName := include "secrets.kubernetesSecretName" (deepCopy $ | merge (dict "object" $fleetManagementObject)) }}
+  {{- $secretNamespace := include "secrets.kubernetesSecretNamespace" (deepCopy $ | merge (dict "object" $fleetManagementObject)) }}
+  {{- $gcloudApiKeyEnv = list (dict "name" "GCLOUD_RW_API_KEY" "valueFrom" (dict "secretKeyRef" (dict "name" $secretName "key" "password" "namespace" $secretNamespace))) }}
+{{- end }}
+
+{{- /* Determine the NAMESPACE environment variable */ -}}
+{{- $namespaceEnv := list (dict "name" "NAMESPACE" "valueFrom" (dict "fieldRef" (dict "fieldPath" "metadata.namespace"))) }}
+
+{{- /* Determine the POD_NAME environment variable */ -}}
+{{- $podNameEnv := list (dict "name" "POD_NAME" "valueFrom" (dict "fieldRef" (dict "fieldPath" "metadata.name"))) }}
+
+{{- /* Determine the GCLOUD_FM_COLLECTOR_ID environment variable */ -}}
+{{- $gcloudFmCollectorIdEnv := list (dict "name" "GCLOUD_FM_COLLECTOR_ID" "value" "alloy-$(CLUSTER_NAME)-$(NAMESPACE)-$(POD_NAME)") }}
+
+{{- /* Add the environment variables to the Alloy values */ -}}
+{{- $additionalEnvs := concat $clusterNameEnv $gcloudApiKeyEnv $namespaceEnv $podNameEnv $gcloudFmCollectorIdEnv }}
+{{- if $alloyValues.alloy.extraEnv }}
+  {{- $alloyValues = mergeOverwrite $alloyValues (dict "alloy" (dict "extraEnv" (concat $additionalEnvs $alloyValues.alloy.extraEnv))) }}
+{{- else }}
+  {{- $alloyValues = mergeOverwrite $alloyValues (dict "alloy" (dict "extraEnv" $additionalEnvs)) }}
+{{- end }}
+
 {{- $alloyConfigContent := include "collectors.remoteConfig.alloy" (deepCopy $ | merge (dict "collectorName" .collectorName "collectorValues" $alloyValues)) }}
 {{- $loggingConfig := include "collector.alloy.loggingConfig" (deepCopy $ | merge (dict "collectorName" .collectorName "collectorValues" $alloyValues)) }}
 {{- $liveDebuggingConfig := include "collector.alloy.liveDebuggingConfig" (deepCopy $ | merge (dict "collectorName" .collectorName "collectorValues" $alloyValues)) }}

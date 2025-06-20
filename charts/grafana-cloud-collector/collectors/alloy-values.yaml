@@ -1,6 +1,18 @@
 ---
 attributes: {}
 
+alloy:
+  # Default to public-preview stability level
+  stabilityLevel: "public-preview"
+
+# Log on info level
+logging:
+  level: "info"
+
+# Enable live debugging
+liveDebugging:
+  enabled: true
+
 # Skip installation of the Grafana Alloy CRDs, since we don't use them in this chart
 # @ignored
 crds:

@@ -1245,10 +1245,10 @@ spec:
           }
         }
         logging {
-          level = "info"
+          level = "debug"
         }
         livedebugging {
-          enabled = true
+          enabled = false
         }
       create: true
       key: null
@@ -1258,7 +1258,7 @@ spec:
     extraArgs: []
     extraEnv:
     - name: CLUSTER_NAME
-      value: ""
+      value: alloy-example
     - name: GCLOUD_RW_API_KEY
       valueFrom:
         secretKeyRef:
@@ -1283,13 +1283,13 @@ spec:
     listenScheme: HTTP
     livenessProbe: {}
     mounts:
-      dockercontainers: false
+      dockercontainers: true
       extra: []
       varlog: true
     resources: {}
     securityContext:
       privileged: true
-    stabilityLevel: public-preview
+    stabilityLevel: experimental
     storagePath: /tmp/alloy
     uiPathPrefix: /
   configReloader:
@@ -1386,8 +1386,8 @@ spec:
     pullPolicy: IfNotPresent
     pullSecrets: []
     registry: docker.io
-    repository: grafana/alloy
-    tag: null
+    repository: grafana/alloy-dev
+    tag: v1.10.0-devel-5126d5f
   ingress:
     annotations: {}
     enabled: false

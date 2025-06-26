@@ -1,5 +1,5 @@
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/kepler/templates/serviceaccount.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kepler/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/version: "release-0.8.0"
     app.kubernetes.io/managed-by: Helm
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/kube-state-metrics/templates/serviceaccount.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kube-state-metrics/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 automountServiceAccountToken: true
@@ -28,7 +28,7 @@ metadata:
   name: test-kube-state-metrics
   namespace: test-namespace
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/node-exporter/templates/serviceaccount.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/node-exporter/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -44,7 +44,7 @@ metadata:
     app.kubernetes.io/version: "1.9.1"
 automountServiceAccountToken: false
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/windows-exporter/templates/serviceaccount.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/windows-exporter/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -59,7 +59,7 @@ metadata:
     app.kubernetes.io/instance: test
     app.kubernetes.io/version: "0.30.6"
 ---
-# Source: grafana-cloud-collector/charts/alloy-operator/templates/serviceaccount.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -73,18 +73,18 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
 ---
-# Source: grafana-cloud-collector/templates/fleet_management_secret.yaml
+# Source: grafana-cloud-onboarding/templates/fleet_management_secret.yaml
 apiVersion: v1
 kind: Secret
 metadata:
-  name: "grafana-cloud-fleet-management-test-grafana-cloud-collector"
+  name: "grafana-cloud-fleet-management-test-grafana-cloud-onboarding"
   namespace: "test-namespace"
 type: Opaque
 data:
   username: "MTIzNDU2"
   password: "Z2xjX3RoaXNpc215cGFzc3dvcmQ="
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/windows-exporter/templates/config.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/windows-exporter/templates/config.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -103,7 +103,7 @@ data:
     collectors:
       enabled: '[defaults],memory,container'
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/kepler/templates/rolebinding.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kepler/templates/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -120,7 +120,7 @@ rules:
       - watch
       - list
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/kube-state-metrics/templates/role.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kube-state-metrics/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -275,7 +275,7 @@ rules:
     - volumeattachments
   verbs: ["list", "watch"]
 ---
-# Source: grafana-cloud-collector/charts/alloy-operator/templates/rbac.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -307,7 +307,7 @@ rules:
     verbs:
       - get
 ---
-# Source: grafana-cloud-collector/charts/alloy-operator/templates/rbac.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -335,7 +335,7 @@ rules:
     verbs:
       - get
 ---
-# Source: grafana-cloud-collector/charts/alloy-operator/templates/rbac.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -447,7 +447,7 @@ rules:
     verbs:
       - '*'
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/kepler/templates/rolebinding.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kepler/templates/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -461,7 +461,7 @@ subjects:
     name: test-kepler
     namespace: test-namespace
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/kube-state-metrics/templates/clusterrolebinding.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kube-state-metrics/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -483,7 +483,7 @@ subjects:
   name: test-kube-state-metrics
   namespace: test-namespace
 ---
-# Source: grafana-cloud-collector/charts/alloy-operator/templates/rbac.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -505,7 +505,7 @@ subjects:
     name: test-alloy-operator
     namespace: test-namespace
 ---
-# Source: grafana-cloud-collector/charts/alloy-operator/templates/rbac.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -551,7 +551,7 @@ rules:
       - create
       - patch
 ---
-# Source: grafana-cloud-collector/charts/alloy-operator/templates/rbac.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -574,7 +574,7 @@ subjects:
     name: test-alloy-operator
     namespace: test-namespace
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/kepler/templates/service.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kepler/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -597,7 +597,7 @@ spec:
     app.kubernetes.io/name: kepler
     app.kubernetes.io/component: exporter
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/kube-state-metrics/templates/service.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kube-state-metrics/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -625,7 +625,7 @@ spec:
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/instance: test
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/node-exporter/templates/service.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/node-exporter/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -652,7 +652,7 @@ spec:
     app.kubernetes.io/name: node-exporter
     app.kubernetes.io/instance: test
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/windows-exporter/templates/service.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/windows-exporter/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -678,7 +678,7 @@ spec:
     app.kubernetes.io/name: windows-exporter
     app.kubernetes.io/instance: test
 ---
-# Source: grafana-cloud-collector/charts/alloy-operator/templates/service.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -704,7 +704,7 @@ spec:
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/kepler/templates/daemonset.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kepler/templates/daemonset.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -833,7 +833,7 @@ spec:
         - effect: NoSchedule
           key: node-role.kubernetes.io/control-plane
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/node-exporter/templates/daemonset.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/node-exporter/templates/daemonset.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -961,7 +961,7 @@ spec:
           hostPath:
             path: /
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/windows-exporter/templates/daemonset.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/windows-exporter/templates/daemonset.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -1059,7 +1059,7 @@ spec:
           configMap:
             name: test-windows-exporter
 ---
-# Source: grafana-cloud-collector/charts/additionalComponents/charts/kube-state-metrics/templates/deployment.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kube-state-metrics/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1145,7 +1145,7 @@ spec:
             - ALL
           readOnlyRootFilesystem: true
 ---
-# Source: grafana-cloud-collector/charts/alloy-operator/templates/deployment.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1208,7 +1208,7 @@ spec:
       nodeSelector:
         kubernetes.io/os: linux
 ---
-# Source: grafana-cloud-collector/templates/alloy.yaml
+# Source: grafana-cloud-onboarding/templates/alloy.yaml
 apiVersion: collectors.grafana.com/v1alpha1
 kind: Alloy
 metadata:
@@ -1223,7 +1223,7 @@ spec:
     configMap:
       content: |-
         remote.kubernetes.secret "grafana_cloud_fleet_management" {
-          name      = "grafana-cloud-fleet-management-test-grafana-cloud-collector"
+          name      = "grafana-cloud-fleet-management-test-grafana-cloud-onboarding"
           namespace = "test-namespace"
         }
         remotecfg {
@@ -1238,17 +1238,17 @@ spec:
             "namespace" = "test-namespace",
             "platform" = "kubernetes",
             "release" = "test",
-            "source" = "grafana-cloud-collector",
+            "source" = "grafana-cloud-onboarding",
             "sourceVersion" = "0.1.0",
             "workloadName" = "alloy-daemon",
             "workloadType" = "daemonset",
           }
         }
         logging {
-          level = "debug"
+          level = "info"
         }
         livedebugging {
-          enabled = false
+          enabled = true
         }
       create: true
       key: null
@@ -1258,12 +1258,12 @@ spec:
     extraArgs: []
     extraEnv:
     - name: CLUSTER_NAME
-      value: alloy-example
+      value: ""
     - name: GCLOUD_RW_API_KEY
       valueFrom:
         secretKeyRef:
           key: password
-          name: grafana-cloud-fleet-management-test-grafana-cloud-collector
+          name: grafana-cloud-fleet-management-test-grafana-cloud-onboarding
           namespace: test-namespace
     - name: NAMESPACE
       valueFrom:
@@ -1283,13 +1283,13 @@ spec:
     listenScheme: HTTP
     livenessProbe: {}
     mounts:
-      dockercontainers: true
+      dockercontainers: false
       extra: []
       varlog: true
     resources: {}
     securityContext:
       privileged: true
-    stabilityLevel: experimental
+    stabilityLevel: public-preview
     storagePath: /tmp/alloy
     uiPathPrefix: /
   configReloader:
@@ -1386,8 +1386,8 @@ spec:
     pullPolicy: IfNotPresent
     pullSecrets: []
     registry: docker.io
-    repository: grafana/alloy-dev
-    tag: v1.10.0-devel-5126d5f
+    repository: grafana/alloy
+    tag: null
   ingress:
     annotations: {}
     enabled: false

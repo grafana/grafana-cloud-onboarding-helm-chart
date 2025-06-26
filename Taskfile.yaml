@@ -8,7 +8,7 @@ tasks:
 
   update-deps:
     desc: Update the dependencies
-    dir: charts/grafana-cloud-collector
+    dir: charts/grafana-cloud-onboarding
     cmds:
       - helm dependency update
 
@@ -21,12 +21,12 @@ tasks:
   unittest:
     desc: Run unit tests for the Helm chart
     cmds:
-      - helm unittest charts/grafana-cloud-collector
+      - helm unittest charts/grafana-cloud-onboarding
 
   lint:
     desc: Lint the Helm chart
     cmds:
-      - helm lint charts/grafana-cloud-collector
+      - helm lint charts/grafana-cloud-onboarding
 
   generate:
     desc: Generate all the generated content
@@ -38,10 +38,10 @@ tasks:
     cmds:
       - |
         set -e
-        for values_file in charts/grafana-cloud-collector/tests/goldenrecords/*_values.yaml; do
+        for values_file in charts/grafana-cloud-onboarding/tests/goldenrecords/*_values.yaml; do
           result_file="${values_file%_values.yaml}_result.yaml"
           echo "Generating $result_file from $values_file"
-          helm template test ./charts/grafana-cloud-collector -f "$values_file" -n test-namespace > "$result_file"
+          helm template test ./charts/grafana-cloud-onboarding -f "$values_file" -n test-namespace > "$result_file"
         done
 
   test-golden-records:
@@ -49,12 +49,12 @@ tasks:
     cmds:
       - |
         set -e
-        for values_file in charts/grafana-cloud-collector/tests/goldenrecords/*_values.yaml; do
+        for values_file in charts/grafana-cloud-onboarding/tests/goldenrecords/*_values.yaml; do
           result_file="${values_file%_values.yaml}_result.yaml"
           temp_file=$(mktemp)
           
           echo "Verifying $result_file..."
-          helm template test ./charts/grafana-cloud-collector -f "$values_file" -n test-namespace > "$temp_file"
+          helm template test ./charts/grafana-cloud-onboarding -f "$values_file" -n test-namespace > "$temp_file"
           
           if ! diff -u "$result_file" "$temp_file"; then
             echo "Error: Generated content does not match golden record for $result_file"

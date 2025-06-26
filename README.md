@@ -18,7 +18,6 @@ task test
 
 ## TODO
 
-- [ ] Name of the repo `grafana-cloud-onboarding-helm-chart` vs. name of the chart `grafana-cloud-collector` - pick one name for both?
 - [ ] Add a golden record test for Alloy CR
 - [ ] Documentation for values.yaml
 - [ ] More examples

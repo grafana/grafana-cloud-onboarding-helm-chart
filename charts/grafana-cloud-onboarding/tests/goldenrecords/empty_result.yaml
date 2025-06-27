@@ -18,13 +18,13 @@ kind: ServiceAccount
 automountServiceAccountToken: true
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-5.33.2
+    helm.sh/chart: kube-state-metrics-6.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.16.0"
   name: test-kube-state-metrics
   namespace: test-namespace
 ---
@@ -35,7 +35,7 @@ metadata:
   name: test-node-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: node-exporter-4.46.1
+    helm.sh/chart: node-exporter-4.47.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -51,13 +51,13 @@ metadata:
   name: test-windows-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: windows-exporter-0.10.1
+    helm.sh/chart: windows-exporter-0.10.3
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: windows-exporter
     app.kubernetes.io/name: windows-exporter
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "0.30.6"
+    app.kubernetes.io/version: "0.30.8"
 ---
 # Source: grafana-cloud-onboarding/charts/alloy-operator/templates/serviceaccount.yaml
 apiVersion: v1
@@ -66,10 +66,10 @@ metadata:
   name: test-alloy-operator
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.1
+    helm.sh/chart: alloy-operator-0.3.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.1.2"
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
 ---
@@ -91,13 +91,13 @@ metadata:
   name: test-windows-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: windows-exporter-0.10.1
+    helm.sh/chart: windows-exporter-0.10.3
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: windows-exporter
     app.kubernetes.io/name: windows-exporter
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "0.30.6"
+    app.kubernetes.io/version: "0.30.8"
 data:
   config.yml: |
     collectors:
@@ -125,13 +125,13 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-5.33.2
+    helm.sh/chart: kube-state-metrics-6.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.16.0"
   name: test-kube-state-metrics
 rules:
 
@@ -150,12 +150,12 @@ rules:
   - cronjobs
   verbs: ["list", "watch"]
 
-- apiGroups: ["extensions", "apps"]
+- apiGroups: ["apps"]
   resources:
   - daemonsets
   verbs: ["list", "watch"]
 
-- apiGroups: ["extensions", "apps"]
+- apiGroups: ["apps"]
   resources:
   - deployments
   verbs: ["list", "watch"]
@@ -170,7 +170,7 @@ rules:
   - horizontalpodautoscalers
   verbs: ["list", "watch"]
 
-- apiGroups: ["extensions", "networking.k8s.io"]
+- apiGroups: ["networking.k8s.io"]
   resources:
   - ingresses
   verbs: ["list", "watch"]
@@ -230,7 +230,7 @@ rules:
   - pods
   verbs: ["list", "watch"]
 
-- apiGroups: ["extensions", "apps"]
+- apiGroups: ["apps"]
   resources:
   - replicasets
   verbs: ["list", "watch"]
@@ -275,92 +275,18 @@ rules:
     - volumeattachments
   verbs: ["list", "watch"]
 ---
-# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-manager.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name:
-    test-alloy-operator-alloy-editor-role
+  name: test-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.3.1
+    helm.sh/chart: alloy-operator-0.3.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.1.2"
     app.kubernetes.io/managed-by: Helm
 rules:
-  - apiGroups:
-      - collectors.grafana.com
-    resources:
-      - alloys
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - collectors.grafana.com
-    resources:
-      - alloys/status
-    verbs:
-      - get
----
-# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name:
-    test-alloy-operator-alloy-viewer-role
-  labels:
-    helm.sh/chart: alloy-operator-0.3.1
-    app.kubernetes.io/name: alloy-operator
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.1"
-    app.kubernetes.io/managed-by: Helm
-rules:
-  - apiGroups:
-      - collectors.grafana.com
-    resources:
-      - alloys
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - collectors.grafana.com
-    resources:
-      - alloys/status
-    verbs:
-      - get
----
-# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name:
-    test-alloy-operator-role
-rules:
-  - apiGroups:
-      - ""
-    resources:
-      - namespaces
-    verbs:
-      - get
-  - apiGroups:
-      - ""
-    resources:
-      - secrets
-    verbs:
-      - '*'
-  - apiGroups:
-      - ""
-    resources:
-      - events
-    verbs:
-      - create
-  # Rules which allow the management of Alloys.
   - apiGroups:
       - collectors.grafana.com
     resources:
@@ -375,77 +301,37 @@ rules:
       - patch
       - update
       - watch
+---
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-objects.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: test-alloy-operator
+rules:
   # Rules which allow the management of ConfigMaps, ServiceAccounts, and Services.
-  - apiGroups:
-      - ""
-    resources:
-      - configmaps
-      - serviceaccounts
-      - services
-    verbs:
-      - '*'
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets", "serviceaccounts", "services"]
+    verbs: ["*"]
   # Rules which allow the management of DaemonSets, Deployments, and StatefulSets.
-  - apiGroups:
-      - apps
-    resources:
-      - daemonsets
-      - deployments
-      - statefulsets
-    verbs:
-      - '*'
+  - apiGroups: ["apps"]
+    resources: ["daemonsets", "deployments", "statefulsets"]
+    verbs: ["*"]
   # Rules which allow the management of Horizontal Pod Autoscalers.
-  - apiGroups:
-      - autoscaling
-    resources:
-      - horizontalpodautoscalers
-    verbs:
-      - '*'
-  # Rules which allow for the management of Prometheus Operator objects.
-  - apiGroups:
-      - monitoring.coreos.com
-    resources:
-      - podmonitors
-      - servicemonitors
-      - probes
-      - scrapeconfigs
-    verbs:
-      - get
-      - list
-      - watch
-  # Rules which allow the management of Ingresses.
-  - apiGroups:
-      - networking.k8s.io
-    resources:
-      - ingresses
-    verbs:
-      - '*'
+  - apiGroups: ["autoscaling"]
+    resources: ["horizontalpodautoscalers"]
+    verbs: ["*"]
+  # Rules which allow the management of Ingresses and NetworkPolicies.
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses", "networkpolicies"]
+    verbs: ["*"]
   # Rules which allow the management of PodDisruptionBudgets.
-  - apiGroups:
-      - policy
-    resources:
-      - poddisruptionbudgets
-    verbs:
-      - '*'
-  # Rules which allow mimir.rules.kubernetes to work.
-  - apiGroups: ["monitoring.coreos.com"]
-    resources:
-      - prometheusrules
-    verbs:
-      - get
-      - list
-      - watch
-  - nonResourceURLs:
-      - /metrics
-    verbs:
-      - get
+  - apiGroups: ["policy"]
+    resources: ["poddisruptionbudgets"]
+    verbs: ["*"]
   # Rules which allow the management of ClusterRoles and ClusterRoleBindings.
-  - apiGroups:
-      - rbac.authorization.k8s.io
-    resources:
-      - clusterrolebindings
-      - clusterroles
-    verbs:
-      - '*'
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["clusterroles", "clusterrolebindings"]
+    verbs: ["*"]
 ---
 # Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kepler/templates/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -466,13 +352,13 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-5.33.2
+    helm.sh/chart: kube-state-metrics-6.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.16.0"
   name: test-kube-state-metrics
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -483,40 +369,57 @@ subjects:
   name: test-kube-state-metrics
   namespace: test-namespace
 ---
-# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-manager.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name:
-    test-alloy-operator-rolebinding
+  name: test-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.3.1
+    helm.sh/chart: alloy-operator-0.3.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.1.2"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name:
-    test-alloy-operator-role
+  name: test-alloy-operator-alloy-manager
 subjects:
   - kind: ServiceAccount
     name: test-alloy-operator
     namespace: test-namespace
 ---
-# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-objects.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: test-alloy-operator
+  labels:
+    helm.sh/chart: alloy-operator-0.3.4
+    app.kubernetes.io/name: alloy-operator
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "1.1.2"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: test-alloy-operator
+subjects:
+  - kind: ServiceAccount
+    name: test-alloy-operator
+    namespace: test-namespace
+---
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/leader-election.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name:
-    test-alloy-operator-leader-election-role
+  name: test-alloy-operator-leader-election-role
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.1
+    helm.sh/chart: alloy-operator-0.3.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.1.2"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -551,24 +454,22 @@ rules:
       - create
       - patch
 ---
-# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/leader-election.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name:
-    test-alloy-operator-leader-election-rolebinding
+  name: test-alloy-operator-leader-election-rolebinding
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.1
+    helm.sh/chart: alloy-operator-0.3.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.1.2"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name:
-    test-alloy-operator-leader-election-role
+  name: test-alloy-operator-leader-election-role
 subjects:
   - kind: ServiceAccount
     name: test-alloy-operator
@@ -604,13 +505,13 @@ metadata:
   name: test-kube-state-metrics
   namespace: test-namespace
   labels:    
-    helm.sh/chart: kube-state-metrics-5.33.2
+    helm.sh/chart: kube-state-metrics-6.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.16.0"
   annotations:
     prometheus.io/scrape: 'true'
 spec:
@@ -632,7 +533,7 @@ metadata:
   name: test-node-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: node-exporter-4.46.1
+    helm.sh/chart: node-exporter-4.47.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -659,13 +560,13 @@ metadata:
   name: test-windows-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: windows-exporter-0.10.1
+    helm.sh/chart: windows-exporter-0.10.3
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: windows-exporter
     app.kubernetes.io/name: windows-exporter
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "0.30.6"
+    app.kubernetes.io/version: "0.30.8"
 spec:
   type: ClusterIP
   ports:
@@ -683,11 +584,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: test-alloy-operator
+  namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.1
+    helm.sh/chart: alloy-operator-0.3.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.1.2"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -840,7 +742,7 @@ metadata:
   name: test-node-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: node-exporter-4.46.1
+    helm.sh/chart: node-exporter-4.47.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -862,7 +764,7 @@ spec:
       annotations:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
       labels:
-        helm.sh/chart: node-exporter-4.46.1
+        helm.sh/chart: node-exporter-4.47.0
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: metrics
         app.kubernetes.io/part-of: node-exporter
@@ -968,13 +870,13 @@ metadata:
   name: test-windows-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: windows-exporter-0.10.1
+    helm.sh/chart: windows-exporter-0.10.3
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: windows-exporter
     app.kubernetes.io/name: windows-exporter
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "0.30.6"
+    app.kubernetes.io/version: "0.30.8"
 spec:
   selector:
     matchLabels:
@@ -989,13 +891,13 @@ spec:
       annotations:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
       labels:
-        helm.sh/chart: windows-exporter-0.10.1
+        helm.sh/chart: windows-exporter-0.10.3
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: metrics
         app.kubernetes.io/part-of: windows-exporter
         app.kubernetes.io/name: windows-exporter
         app.kubernetes.io/instance: test
-        app.kubernetes.io/version: "0.30.6"
+        app.kubernetes.io/version: "0.30.8"
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -1004,13 +906,13 @@ spec:
           runAsUserName: NT AUTHORITY\system
       initContainers:
         - name: configure-firewall
-          image: ghcr.io/prometheus-community/windows-exporter:0.30.6
+          image: ghcr.io/prometheus-community/windows-exporter:0.30.8
           command: [ "powershell" ]
           args: [ "New-NetFirewallRule", "-DisplayName", "'windows-exporter'", "-Direction", "inbound", "-Profile", "Any", "-Action", "Allow", "-LocalPort", "9182", "-Protocol", "TCP" ]
       serviceAccountName: test-windows-exporter
       containers:
         - name: windows-exporter
-          image: ghcr.io/prometheus-community/windows-exporter:0.30.6
+          image: ghcr.io/prometheus-community/windows-exporter:0.30.8
           imagePullPolicy: IfNotPresent
           args:
             - --config.file=%CONTAINER_SANDBOX_MOUNT_POINT%/config.yml
@@ -1066,13 +968,13 @@ metadata:
   name: test-kube-state-metrics
   namespace: test-namespace
   labels:    
-    helm.sh/chart: kube-state-metrics-5.33.2
+    helm.sh/chart: kube-state-metrics-6.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.16.0"
 spec:
   selector:
     matchLabels:      
@@ -1085,13 +987,13 @@ spec:
   template:
     metadata:
       labels:        
-        helm.sh/chart: kube-state-metrics-5.33.2
+        helm.sh/chart: kube-state-metrics-6.1.0
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: metrics
         app.kubernetes.io/part-of: kube-state-metrics
         app.kubernetes.io/name: kube-state-metrics
         app.kubernetes.io/instance: test
-        app.kubernetes.io/version: "2.15.0"
+        app.kubernetes.io/version: "2.16.0"
     spec:
       automountServiceAccountToken: true
       hostNetwork: false
@@ -1110,7 +1012,7 @@ spec:
         - --port=8080
         - --resources=certificatesigningrequests,configmaps,cronjobs,daemonsets,deployments,endpoints,horizontalpodautoscalers,ingresses,jobs,leases,limitranges,mutatingwebhookconfigurations,namespaces,networkpolicies,nodes,persistentvolumeclaims,persistentvolumes,poddisruptionbudgets,pods,replicasets,replicationcontrollers,resourcequotas,secrets,services,statefulsets,storageclasses,validatingwebhookconfigurations,volumeattachments
         imagePullPolicy: IfNotPresent
-        image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.15.0
+        image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.16.0
         ports:
         - containerPort: 8080
           name: "http"
@@ -1150,11 +1052,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: test-alloy-operator
+  namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.1
+    helm.sh/chart: alloy-operator-0.3.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.1"
+    app.kubernetes.io/version: "1.1.2"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -1165,16 +1068,16 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: alloy-operator-0.3.1
+        helm.sh/chart: alloy-operator-0.3.4
         app.kubernetes.io/name: alloy-operator
         app.kubernetes.io/instance: test
-        app.kubernetes.io/version: "1.1.1"
+        app.kubernetes.io/version: "1.1.2"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: test-alloy-operator
       containers:
         - name: alloy-operator
-          image: "ghcr.io/grafana/alloy-operator:1.1.1"
+          image: "ghcr.io/grafana/alloy-operator:1.1.2"
           imagePullPolicy: IfNotPresent
           args:
             - --leader-elect

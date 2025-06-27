@@ -1284,13 +1284,16 @@ spec:
     livenessProbe: {}
     mounts:
       dockercontainers: false
-      extra: []
+      extra:
+      - mountPath: /var/lib/alloy
+        name: alloy-storage
+        readOnly: false
       varlog: true
     resources: {}
     securityContext:
       privileged: true
     stabilityLevel: public-preview
-    storagePath: /tmp/alloy
+    storagePath: /var/lib/alloy
     uiPathPrefix: /
   configReloader:
     customArgs: []
@@ -1372,7 +1375,11 @@ spec:
     updateStrategy: {}
     volumeClaimTemplates: []
     volumes:
-      extra: []
+      extra:
+      - hostPath:
+          path: /var/lib/alloy
+          type: DirectoryOrCreate
+        name: alloy-storage
   crds:
     create: false
   extraObjects: []

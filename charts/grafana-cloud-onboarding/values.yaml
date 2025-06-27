@@ -28,14 +28,26 @@ collectors:
     # Additional attributes to send to Fleet Management.
     attributes: {}
     alloy:
-      # TODO: we should have a place to store positions files and FM cache?
-      # storagePath: /var/log/alloy-daemon-data ?
+      # Storage path for Alloy data (Write-Ahead Log, positions files, etc.)
+      storagePath: /var/lib/alloy
       mounts:
         varlog: true
+        # Extra volume mount for Alloy's storage
+        extra:
+          - name: alloy-storage
+            mountPath: /var/lib/alloy
+            readOnly: false
       securityContext:
         privileged: true
     controller:
       hostPID: true
+      volumes:
+        # Extra volume for Alloy's storage. Using hostPath for DaemonSet to avoid issues with PVC management.
+        extra:
+          - name: alloy-storage
+            hostPath:
+              path: /var/lib/alloy
+              type: DirectoryOrCreate
 
 # Extra components to deploy to the cluster to provide additional metric sources.
 additionalComponents:

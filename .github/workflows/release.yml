@@ -130,7 +130,7 @@ jobs:
         uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8  # v2.3.2
         with:
           name: ${{ steps.parse-chart.outputs.tagname }}
-          repository: grafana/grafana-cloud-onboarding-helm
+          repository: grafana/grafana-cloud-onboarding-helm-chart
           generate_release_notes: true
           files: |
             ${{ env.CR_PACKAGE_PATH }}/${{ steps.parse-chart.outputs.packagename }}.tgz

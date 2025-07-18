@@ -10,6 +10,6 @@ dependencies:
   version: 0.10.3
 - name: kepler
   repository: https://sustainable-computing-io.github.io/kepler-helm-chart
-  version: 0.6.0
-digest: sha256:703d4f118d9c8c80e80856236d720cd8002129a21b409b2a31e5efd4224de777
-generated: "2025-06-27T17:07:29.576822-05:00"
+  version: 0.6.1
+digest: sha256:4717499df19eb34c8048f83f42b914a0830f9319891e9865daf4619fa9b4f8aa
+generated: "2025-07-15T13:34:39.690989911Z"

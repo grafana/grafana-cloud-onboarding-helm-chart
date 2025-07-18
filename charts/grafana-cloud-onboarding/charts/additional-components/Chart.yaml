@@ -24,7 +24,7 @@ dependencies:
     repository: https://prometheus-community.github.io/helm-charts
     condition: windows-exporter.enabled
   - name: kepler
-    version: 0.6.0
+    version: 0.6.1
     repository: https://sustainable-computing-io.github.io/kepler-helm-chart
     condition: kepler.enabled
 #  - name: opencost

@@ -1,0 +1,38 @@
+beyla.ebpf "surveyor" {
+	metrics {
+		features = ["application", "application_process", "application_span", "application_service_graph"]
+	}
+
+	attributes {
+		kubernetes {
+			cluster_name = sys.env("CLUSTER_NAME")
+			enable       = "true"
+		}
+	}
+
+	discovery {
+		survey {
+			kubernetes {
+				owner_name = "*"
+			}
+		}
+	}
+}
+
+prometheus.scrape "surveyor" {
+	targets      = beyla.ebpf.surveyor.targets
+	honor_labels = true // required to keep job and instance labels intact
+	forward_to   = [prometheus.remote_write.surveyor.receiver]
+}
+
+// Write metrics to your Grafana Cloud Prometheus instance.
+prometheus.remote_write "surveyor" {
+	endpoint {
+		url = "https://prometheus-prod-13-prod-us-east-0.grafana.net/api/prom/push"
+
+		basic_auth {
+			username = "1867758"
+			password = sys.env("GCLOUD_RW_API_KEY")
+		}
+	}
+}

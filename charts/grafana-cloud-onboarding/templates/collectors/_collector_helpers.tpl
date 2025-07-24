@@ -78,7 +78,8 @@ livedebugging {
 {{- if eq (include "secrets.usesKubernetesSecret" $fleetManagementObject) "true" }}
   {{- $secretName := include "secrets.kubernetesSecretName" (deepCopy $ | merge (dict "object" $fleetManagementObject)) }}
   {{- $secretNamespace := include "secrets.kubernetesSecretNamespace" (deepCopy $ | merge (dict "object" $fleetManagementObject)) }}
-  {{- $gcloudApiKeyEnv = list (dict "name" "GCLOUD_RW_API_KEY" "valueFrom" (dict "secretKeyRef" (dict "name" $secretName "key" "password" "namespace" $secretNamespace))) }}
+  {{- $secretKey := include "secrets.getSecretKey" (deepCopy $ | merge (dict "object" $fleetManagementObject "key" "auth.password")) }}
+  {{- $gcloudApiKeyEnv = list (dict "name" "GCLOUD_RW_API_KEY" "valueFrom" (dict "secretKeyRef" (dict "name" $secretName "key" $secretKey "namespace" $secretNamespace))) }}
 {{- end }}
 
 {{- /* Determine the NAMESPACE environment variable */ -}}

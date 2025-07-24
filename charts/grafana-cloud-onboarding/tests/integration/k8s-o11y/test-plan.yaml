@@ -1,0 +1,34 @@
+---
+apiVersion: helm-chart-toolbox.grafana.com/v1
+kind: TestPlan
+name: k8s-o11y
+
+subject:
+  path: ../../..
+  valuesFile: values.yaml
+
+cluster:
+  type: kind
+
+dependencies:
+  - file: ../grafana-cloud-credentials.yaml
+
+tests:
+  - type: query-test
+    values:
+      tests:
+        - envFrom:
+            - secretRef: {name: grafana-cloud}
+          env:
+            CLUSTER_NAME: k8s-o11y-test
+            PROMETHEUS_URL: https://prometheus-prod-13-prod-us-east-0.grafana.net/api/prom/api/v1/query
+          queries:
+            # Beyla Surveyor
+            - query: survey_info{k8s_cluster_name="k8s-o11y-test", k8s_deployment_name="k8s-o11y-kube-state-metrics"}
+              type: promql
+            - query: survey_info{k8s_cluster_name="k8s-o11y-test", k8s_daemonset_name="k8s-o11y-node-exporter"}
+              type: promql
+
+            # kube-state-metrics
+            - query: kube_node_info{cluster="$CLUSTER_NAME"}
+              type: promql

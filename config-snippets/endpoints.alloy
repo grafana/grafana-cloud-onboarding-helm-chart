@@ -1,0 +1,27 @@
+discovery.kubernetes "my_endpoints" {
+  role = "endpoints"
+  namespaces {
+    names = ["my_namespace"]
+  }
+  selectors {
+    role = "service"
+    field = "metadata.name=my_service"
+  }
+}
+
+prometheus.scrape "my_endpoints" {
+  targets = discovery.kubernetes.my_endpoints.targets
+  job_name = "my_service"
+  scrape_interval = "60s"
+  forward_to = [prometheus.relabel.my_endpoints.receiver]
+}
+
+prometheus.relabel "my_endpoints" {
+  rule {
+    source_labels = ["__name__"]
+    regex = "up|scrape_samples_scraped|<my metric allow list>"
+    action = "keep"
+  }
+
+  forward_to = [prometheus.remote_write.grafana_cloud_metrics.receiver]
+}

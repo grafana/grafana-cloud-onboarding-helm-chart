@@ -1,0 +1,214 @@
+// Discover all nodes
+discovery.kubernetes "nodes" {
+	role = "node"
+}
+
+// Set the node name
+discovery.relabel "nodes" {
+	targets = discovery.kubernetes.nodes.targets
+
+	rule {
+		source_labels = ["__meta_kubernetes_node_name"]
+		target_label  = "node"
+	}
+}
+
+// Kubelet
+prometheus.scrape "kubelet" {
+	targets           = discovery.relabel.nodes.output
+	job_name          = "integrations/kubernetes/kubelet"
+	scheme            = "https"
+	scrape_interval   = "60s"
+	bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+
+	tls_config {
+		ca_file              = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+		insecure_skip_verify = true
+		server_name          = "kubernetes"
+	}
+
+	clustering {
+		enabled = true
+	}
+
+	forward_to = [prometheus.relabel.kubelet.receiver]
+}
+
+prometheus.relabel "kubelet" {
+	max_cache_size = 100000
+
+	rule {
+		source_labels = ["__name__"]
+		regex         = "up|scrape_samples_scraped|go_goroutines|kubelet_certificate_manager_client_expiration_renew_errors|kubelet_certificate_manager_client_ttl_seconds|kubelet_certificate_manager_server_ttl_seconds|kubelet_cgroup_manager_duration_seconds_bucket|kubelet_cgroup_manager_duration_seconds_count|kubelet_node_config_error|kubelet_node_name|kubelet_pleg_relist_duration_seconds_bucket|kubelet_pleg_relist_duration_seconds_count|kubelet_pleg_relist_interval_seconds_bucket|kubelet_pod_start_duration_seconds_bucket|kubelet_pod_start_duration_seconds_count|kubelet_pod_worker_duration_seconds_bucket|kubelet_pod_worker_duration_seconds_count|kubelet_running_container_count|kubelet_running_containers|kubelet_running_pod_count|kubelet_running_pods|kubelet_runtime_operations_errors_total|kubelet_runtime_operations_total|kubelet_server_expiration_renew_errors|kubelet_volume_stats_available_bytes|kubelet_volume_stats_capacity_bytes|kubelet_volume_stats_inodes|kubelet_volume_stats_inodes_free|kubelet_volume_stats_inodes_used|kubelet_volume_stats_used_bytes|kubernetes_build_info|namespace_workload_pod|process_cpu_seconds_total|process_resident_memory_bytes|rest_client_requests_total|storage_operation_duration_seconds_count|storage_operation_errors_total|volume_manager_total_volumes"
+		action        = "keep"
+	}
+
+	rule {
+		target_label = "cluster"
+		replacement  = sys.env("CLUSTER_NAME")
+	}
+
+	forward_to = [prometheus.remote_write.kubelet.receiver]
+}
+
+// Kubelet Resources
+prometheus.scrape "kubelet_resources" {
+	targets           = discovery.relabel.nodes.output
+	metrics_path      = "/metrics/resource"
+	job_name          = "integrations/kubernetes/resources"
+	scheme            = "https"
+	scrape_interval   = "60s"
+	bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+
+	tls_config {
+		ca_file              = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+		insecure_skip_verify = true
+		server_name          = "kubernetes"
+	}
+
+	clustering {
+		enabled = true
+	}
+
+	forward_to = [prometheus.relabel.kubelet_resources.receiver]
+}
+
+prometheus.relabel "kubelet_resources" {
+	max_cache_size = 100000
+
+	rule {
+		source_labels = ["__name__"]
+		regex         = "up|scrape_samples_scraped|node_cpu_usage_seconds_total|node_memory_working_set_bytes"
+		action        = "keep"
+	}
+
+	rule {
+		target_label = "cluster"
+		replacement  = sys.env("CLUSTER_NAME")
+	}
+
+	forward_to = [prometheus.remote_write.kubelet.receiver]
+}
+
+// cAdvisor
+prometheus.scrape "cadvisor" {
+	targets           = discovery.relabel.nodes.output
+	job_name          = "integrations/kubernetes/cadvisor"
+	metrics_path      = "/metrics/cadvisor"
+	scheme            = "https"
+	scrape_interval   = "60s"
+	bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+
+	tls_config {
+		ca_file              = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+		insecure_skip_verify = true
+		server_name          = "kubernetes"
+	}
+
+	clustering {
+		enabled = true
+	}
+
+	forward_to = [prometheus.relabel.cadvisor.receiver]
+}
+
+prometheus.relabel "cadvisor" {
+	max_cache_size = 100000
+
+	rule {
+		source_labels = ["__name__"]
+		regex         = "up|scrape_samples_scraped|container_cpu_cfs_periods_total|container_cpu_cfs_throttled_periods_total|container_cpu_usage_seconds_total|container_fs_reads_bytes_total|container_fs_reads_total|container_fs_writes_bytes_total|container_fs_writes_total|container_memory_cache|container_memory_rss|container_memory_swap|container_memory_working_set_bytes|container_network_receive_bytes_total|container_network_receive_packets_dropped_total|container_network_receive_packets_total|container_network_transmit_bytes_total|container_network_transmit_packets_dropped_total|container_network_transmit_packets_total|machine_memory_bytes"
+		action        = "keep"
+	}
+	// Drop empty container labels, addressing https://github.com/google/cadvisor/issues/2688
+	rule {
+		source_labels = ["__name__", "container"]
+		separator     = "@"
+		regex         = "(container_cpu_.*|container_fs_.*|container_memory_.*)@"
+		action        = "drop"
+	}
+	// Drop empty image labels, addressing https://github.com/google/cadvisor/issues/2688
+	rule {
+		source_labels = ["__name__", "image"]
+		separator     = "@"
+		regex         = "(container_cpu_.*|container_fs_.*|container_memory_.*|container_network_.*)@"
+		action        = "drop"
+	}
+	// Normalizing unimportant labels (not deleting to continue satisfying <label>!="" checks)
+	rule {
+		source_labels = ["__name__", "boot_id"]
+		separator     = "@"
+		regex         = "machine_memory_bytes@.*"
+		target_label  = "boot_id"
+		replacement   = "NA"
+	}
+
+	rule {
+		source_labels = ["__name__", "system_uuid"]
+		separator     = "@"
+		regex         = "machine_memory_bytes@.*"
+		target_label  = "system_uuid"
+		replacement   = "NA"
+	}
+	// Filter out non-physical devices/interfaces
+	rule {
+		source_labels = ["__name__", "device"]
+		separator     = "@"
+		regex         = "container_fs_.*@(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dasd.+)"
+		target_label  = "__keepme"
+		replacement   = "1"
+	}
+
+	rule {
+		source_labels = ["__name__", "__keepme"]
+		separator     = "@"
+		regex         = "container_fs_.*@"
+		action        = "drop"
+	}
+
+	rule {
+		source_labels = ["__name__"]
+		regex         = "container_fs_.*"
+		target_label  = "__keepme"
+		replacement   = ""
+	}
+
+	rule {
+		source_labels = ["__name__", "interface"]
+		separator     = "@"
+		regex         = "container_network_.*@(en[ospx][0-9].*|wlan[0-9].*|eth[0-9].*)"
+		target_label  = "__keepme"
+		replacement   = "1"
+	}
+
+	rule {
+		source_labels = ["__name__", "__keepme"]
+		separator     = "@"
+		regex         = "container_network_.*@"
+		action        = "drop"
+	}
+
+	rule {
+		source_labels = ["__name__"]
+		regex         = "container_network_.*"
+		target_label  = "__keepme"
+		replacement   = ""
+	}
+
+	rule {
+		target_label = "cluster"
+		replacement  = sys.env("CLUSTER_NAME")
+	}
+	forward_to = [prometheus.remote_write.kubelet.receiver]
+}
+// Write metrics to your Grafana Cloud Prometheus instance.
+prometheus.remote_write "kubelet" {
+	endpoint {
+		url = "https://prometheus-prod-13-prod-us-east-0.grafana.net/api/prom/push"
+
+		basic_auth {
+			username = "1867758"
+			password = sys.env("GCLOUD_RW_API_KEY")
+		}
+	}
+}

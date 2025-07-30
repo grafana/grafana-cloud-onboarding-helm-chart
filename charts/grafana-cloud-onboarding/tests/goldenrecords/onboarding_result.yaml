@@ -1138,6 +1138,7 @@ spec:
           }
           poll_frequency = "5m"
           attributes = {
+            "cluster" = "alloy-example",
             "namespace" = "test-namespace",
             "platform" = "kubernetes",
             "release" = "test",

@@ -3,6 +3,7 @@ platform: kubernetes
 source: {{ .Chart.Name }}
 sourceVersion: {{ .Chart.Version }}
 release: {{ .Release.Name }}
+cluster: {{ .Values.cluster.name }}
 namespace: {{ .Release.Namespace }}
 workloadName: {{ .collectorName }}
 workloadType: {{ .collectorValues.controller.type }}

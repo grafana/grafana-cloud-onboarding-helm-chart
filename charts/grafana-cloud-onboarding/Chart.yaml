@@ -6,7 +6,7 @@ version: 0.1.1
 appVersion: 1.16.0
 dependencies:
   - name: alloy-operator
-    version: 0.3.6
+    version: 0.3.7
     repository: https://grafana.github.io/helm-charts
     condition: alloy-operator.enabled
   - alias: additionalComponents

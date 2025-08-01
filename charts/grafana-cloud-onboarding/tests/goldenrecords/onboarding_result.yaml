@@ -1255,11 +1255,11 @@ spec:
             maxAllowed: {}
             minAllowed: {}
         updatePolicy: null
-    dnsPolicy: ClusterFirst
+    dnsPolicy: ClusterFirstWithHostNet
     enableStatefulSetAutoDeletePVC: false
     extraAnnotations: {}
     extraContainers: []
-    hostNetwork: false
+    hostNetwork: true
     hostPID: true
     initContainers: []
     nodeSelector: {}

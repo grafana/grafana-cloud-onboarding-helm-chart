@@ -41,6 +41,8 @@ collectors:
         privileged: true
     controller:
       hostPID: true
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       volumes:
         # Extra volume for Alloy's storage. Using hostPath for DaemonSet to avoid issues with PVC management.
         extra:

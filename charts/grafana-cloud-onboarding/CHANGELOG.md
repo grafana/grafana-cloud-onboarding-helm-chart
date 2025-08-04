@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.2.0
+
 *   Set hostNetwork to true and dnsPolicy to ClusterFirstWithHostNet for Alloy DaemonSet to enable Beyla to work with Asserts (@thampiotr)
 
 ## 0.1.1

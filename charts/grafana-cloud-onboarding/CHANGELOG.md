@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.2.1
+
+*   Update Alloy Operator to 0.3.8 (@petewall)
+*   Update kube-state-metrics to 6.1.4 (@petewall)
+
 ## 0.2.0
 
 *   Set hostNetwork to true and dnsPolicy to ClusterFirstWithHostNet for Alloy DaemonSet to enable Beyla to work with Asserts (@thampiotr)

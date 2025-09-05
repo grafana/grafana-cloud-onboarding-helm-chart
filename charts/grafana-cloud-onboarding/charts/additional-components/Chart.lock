@@ -1,7 +1,7 @@
 dependencies:
 - name: kube-state-metrics
   repository: https://prometheus-community.github.io/helm-charts
-  version: 6.1.4
+  version: 6.3.0
 - name: prometheus-node-exporter
   repository: https://prometheus-community.github.io/helm-charts
   version: 4.47.0
@@ -11,5 +11,5 @@ dependencies:
 - name: kepler
   repository: https://sustainable-computing-io.github.io/kepler-helm-chart
   version: 0.6.1
-digest: sha256:37d5f6eeb31eb4a41442cedf1da33425378dddab696a3ae223f371ca654ee510
-generated: "2025-08-08T13:55:15.813633756Z"
+digest: sha256:2f9a68238f8f99fd79ee197786235d466d048920460ca70d5e027eae65ff68be
+generated: "2025-09-03T13:23:33.899886931Z"

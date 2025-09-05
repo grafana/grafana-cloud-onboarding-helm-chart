@@ -6,7 +6,7 @@ metadata:
   name: test-kepler
   namespace: test-namespace
   labels:
-    helm.sh/chart: kepler-0.6.0
+    helm.sh/chart: kepler-0.6.1
     app.kubernetes.io/name: kepler
     app.kubernetes.io/component: exporter
     app.kubernetes.io/version: "release-0.8.0"
@@ -18,44 +18,44 @@ kind: ServiceAccount
 automountServiceAccountToken: true
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-6.1.0
+    helm.sh/chart: kube-state-metrics-6.3.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.16.0"
+    app.kubernetes.io/version: "2.17.0"
   name: test-kube-state-metrics
   namespace: test-namespace
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/node-exporter/templates/serviceaccount.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/prometheus-node-exporter/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: test-node-exporter
+  name: test-prometheus-node-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: node-exporter-4.47.0
+    helm.sh/chart: prometheus-node-exporter-4.47.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: node-exporter
-    app.kubernetes.io/name: node-exporter
+    app.kubernetes.io/part-of: prometheus-node-exporter
+    app.kubernetes.io/name: prometheus-node-exporter
     app.kubernetes.io/instance: test
     app.kubernetes.io/version: "1.9.1"
 automountServiceAccountToken: false
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/windows-exporter/templates/serviceaccount.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/prometheus-windows-exporter/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: test-windows-exporter
+  name: test-prometheus-windows-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: windows-exporter-0.10.3
+    helm.sh/chart: prometheus-windows-exporter-0.10.3
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: windows-exporter
-    app.kubernetes.io/name: windows-exporter
+    app.kubernetes.io/part-of: prometheus-windows-exporter
+    app.kubernetes.io/name: prometheus-windows-exporter
     app.kubernetes.io/instance: test
     app.kubernetes.io/version: "0.30.8"
 ---
@@ -66,10 +66,10 @@ metadata:
   name: test-alloy-operator
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.4
+    helm.sh/chart: alloy-operator-0.3.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.2"
+    app.kubernetes.io/version: "1.2.1"
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
 ---
@@ -84,18 +84,18 @@ data:
   username: "MTIzNDU2"
   password: "Z2xjX3RoaXNpc215cGFzc3dvcmQ="
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/windows-exporter/templates/config.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/prometheus-windows-exporter/templates/config.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: test-windows-exporter
+  name: test-prometheus-windows-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: windows-exporter-0.10.3
+    helm.sh/chart: prometheus-windows-exporter-0.10.3
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: windows-exporter
-    app.kubernetes.io/name: windows-exporter
+    app.kubernetes.io/part-of: prometheus-windows-exporter
+    app.kubernetes.io/name: prometheus-windows-exporter
     app.kubernetes.io/instance: test
     app.kubernetes.io/version: "0.30.8"
 data:
@@ -125,13 +125,13 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-6.1.0
+    helm.sh/chart: kube-state-metrics-6.3.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.16.0"
+    app.kubernetes.io/version: "2.17.0"
   name: test-kube-state-metrics
 rules:
 
@@ -281,10 +281,10 @@ kind: ClusterRole
 metadata:
   name: test-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.3.4
+    helm.sh/chart: alloy-operator-0.3.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.2"
+    app.kubernetes.io/version: "1.2.1"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -328,9 +328,9 @@ rules:
   - apiGroups: ["policy"]
     resources: ["poddisruptionbudgets"]
     verbs: ["*"]
-  # Rules which allow the management of ClusterRoles and ClusterRoleBindings.
+  # Rules which allow the management of ClusterRoles, ClusterRoleBindings, Roles, and RoleBindings.
   - apiGroups: ["rbac.authorization.k8s.io"]
-    resources: ["clusterroles", "clusterrolebindings"]
+    resources: ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
     verbs: ["*"]
 ---
 # Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kepler/templates/rolebinding.yaml
@@ -352,13 +352,13 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-6.1.0
+    helm.sh/chart: kube-state-metrics-6.3.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.16.0"
+    app.kubernetes.io/version: "2.17.0"
   name: test-kube-state-metrics
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -375,10 +375,10 @@ kind: ClusterRoleBinding
 metadata:
   name: test-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.3.4
+    helm.sh/chart: alloy-operator-0.3.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.2"
+    app.kubernetes.io/version: "1.2.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -395,10 +395,10 @@ kind: ClusterRoleBinding
 metadata:
   name: test-alloy-operator
   labels:
-    helm.sh/chart: alloy-operator-0.3.4
+    helm.sh/chart: alloy-operator-0.3.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.2"
+    app.kubernetes.io/version: "1.2.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -416,10 +416,10 @@ metadata:
   name: test-alloy-operator-leader-election-role
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.4
+    helm.sh/chart: alloy-operator-0.3.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.2"
+    app.kubernetes.io/version: "1.2.1"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -461,10 +461,10 @@ metadata:
   name: test-alloy-operator-leader-election-rolebinding
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.4
+    helm.sh/chart: alloy-operator-0.3.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.2"
+    app.kubernetes.io/version: "1.2.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -482,7 +482,7 @@ metadata:
   name: test-kepler
   namespace: test-namespace
   labels:
-    helm.sh/chart: kepler-0.6.0
+    helm.sh/chart: kepler-0.6.1
     app.kubernetes.io/name: kepler
     app.kubernetes.io/component: exporter
     app.kubernetes.io/version: "release-0.8.0"
@@ -505,39 +505,39 @@ metadata:
   name: test-kube-state-metrics
   namespace: test-namespace
   labels:    
-    helm.sh/chart: kube-state-metrics-6.1.0
+    helm.sh/chart: kube-state-metrics-6.3.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.16.0"
+    app.kubernetes.io/version: "2.17.0"
   annotations:
     prometheus.io/scrape: 'true'
 spec:
   type: "ClusterIP"
   ports:
-  - name: "http"
+  - name: http
     protocol: TCP
     port: 8080
-    targetPort: 8080
+    targetPort: http
   
   selector:    
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/instance: test
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/node-exporter/templates/service.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/prometheus-node-exporter/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: test-node-exporter
+  name: test-prometheus-node-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: node-exporter-4.47.0
+    helm.sh/chart: prometheus-node-exporter-4.47.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: node-exporter
-    app.kubernetes.io/name: node-exporter
+    app.kubernetes.io/part-of: prometheus-node-exporter
+    app.kubernetes.io/name: prometheus-node-exporter
     app.kubernetes.io/instance: test
     app.kubernetes.io/version: "1.9.1"
   annotations:
@@ -550,21 +550,21 @@ spec:
       protocol: TCP
       name: metrics
   selector:
-    app.kubernetes.io/name: node-exporter
+    app.kubernetes.io/name: prometheus-node-exporter
     app.kubernetes.io/instance: test
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/windows-exporter/templates/service.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/prometheus-windows-exporter/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: test-windows-exporter
+  name: test-prometheus-windows-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: windows-exporter-0.10.3
+    helm.sh/chart: prometheus-windows-exporter-0.10.3
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: windows-exporter
-    app.kubernetes.io/name: windows-exporter
+    app.kubernetes.io/part-of: prometheus-windows-exporter
+    app.kubernetes.io/name: prometheus-windows-exporter
     app.kubernetes.io/instance: test
     app.kubernetes.io/version: "0.30.8"
 spec:
@@ -576,7 +576,7 @@ spec:
       appProtocol: http
       name: metrics
   selector:
-    app.kubernetes.io/name: windows-exporter
+    app.kubernetes.io/name: prometheus-windows-exporter
     app.kubernetes.io/instance: test
 ---
 # Source: grafana-cloud-onboarding/charts/alloy-operator/templates/service.yaml
@@ -586,10 +586,10 @@ metadata:
   name: test-alloy-operator
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.4
+    helm.sh/chart: alloy-operator-0.3.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.2"
+    app.kubernetes.io/version: "1.2.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -613,7 +613,7 @@ metadata:
   name: test-kepler
   namespace: test-namespace
   labels:
-    helm.sh/chart: kepler-0.6.0
+    helm.sh/chart: kepler-0.6.1
     app.kubernetes.io/name: kepler
     app.kubernetes.io/component: exporter
     app.kubernetes.io/version: "release-0.8.0"
@@ -735,24 +735,24 @@ spec:
         - effect: NoSchedule
           key: node-role.kubernetes.io/control-plane
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/node-exporter/templates/daemonset.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/prometheus-node-exporter/templates/daemonset.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: test-node-exporter
+  name: test-prometheus-node-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: node-exporter-4.47.0
+    helm.sh/chart: prometheus-node-exporter-4.47.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: node-exporter
-    app.kubernetes.io/name: node-exporter
+    app.kubernetes.io/part-of: prometheus-node-exporter
+    app.kubernetes.io/name: prometheus-node-exporter
     app.kubernetes.io/instance: test
     app.kubernetes.io/version: "1.9.1"
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: node-exporter
+      app.kubernetes.io/name: prometheus-node-exporter
       app.kubernetes.io/instance: test
   revisionHistoryLimit: 10
   updateStrategy:
@@ -764,11 +764,11 @@ spec:
       annotations:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
       labels:
-        helm.sh/chart: node-exporter-4.47.0
+        helm.sh/chart: prometheus-node-exporter-4.47.0
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: metrics
-        app.kubernetes.io/part-of: node-exporter
-        app.kubernetes.io/name: node-exporter
+        app.kubernetes.io/part-of: prometheus-node-exporter
+        app.kubernetes.io/name: prometheus-node-exporter
         app.kubernetes.io/instance: test
         app.kubernetes.io/version: "1.9.1"
     spec:
@@ -778,7 +778,7 @@ spec:
         runAsGroup: 65534
         runAsNonRoot: true
         runAsUser: 65534
-      serviceAccountName: test-node-exporter
+      serviceAccountName: test-prometheus-node-exporter
       containers:
         - name: node-exporter
           image: quay.io/prometheus/node-exporter:v1.9.1
@@ -863,24 +863,24 @@ spec:
           hostPath:
             path: /
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/windows-exporter/templates/daemonset.yaml
+# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/prometheus-windows-exporter/templates/daemonset.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: test-windows-exporter
+  name: test-prometheus-windows-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: windows-exporter-0.10.3
+    helm.sh/chart: prometheus-windows-exporter-0.10.3
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: windows-exporter
-    app.kubernetes.io/name: windows-exporter
+    app.kubernetes.io/part-of: prometheus-windows-exporter
+    app.kubernetes.io/name: prometheus-windows-exporter
     app.kubernetes.io/instance: test
     app.kubernetes.io/version: "0.30.8"
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: windows-exporter
+      app.kubernetes.io/name: prometheus-windows-exporter
       app.kubernetes.io/instance: test
   updateStrategy:
     rollingUpdate:
@@ -891,11 +891,11 @@ spec:
       annotations:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
       labels:
-        helm.sh/chart: windows-exporter-0.10.3
+        helm.sh/chart: prometheus-windows-exporter-0.10.3
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: metrics
-        app.kubernetes.io/part-of: windows-exporter
-        app.kubernetes.io/name: windows-exporter
+        app.kubernetes.io/part-of: prometheus-windows-exporter
+        app.kubernetes.io/name: prometheus-windows-exporter
         app.kubernetes.io/instance: test
         app.kubernetes.io/version: "0.30.8"
     spec:
@@ -909,7 +909,7 @@ spec:
           image: ghcr.io/prometheus-community/windows-exporter:0.30.8
           command: [ "powershell" ]
           args: [ "New-NetFirewallRule", "-DisplayName", "'windows-exporter'", "-Direction", "inbound", "-Profile", "Any", "-Action", "Allow", "-LocalPort", "9182", "-Protocol", "TCP" ]
-      serviceAccountName: test-windows-exporter
+      serviceAccountName: test-prometheus-windows-exporter
       containers:
         - name: windows-exporter
           image: ghcr.io/prometheus-community/windows-exporter:0.30.8
@@ -959,7 +959,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: test-windows-exporter
+            name: test-prometheus-windows-exporter
 ---
 # Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kube-state-metrics/templates/deployment.yaml
 apiVersion: apps/v1
@@ -968,13 +968,13 @@ metadata:
   name: test-kube-state-metrics
   namespace: test-namespace
   labels:    
-    helm.sh/chart: kube-state-metrics-6.1.0
+    helm.sh/chart: kube-state-metrics-6.3.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.16.0"
+    app.kubernetes.io/version: "2.17.0"
 spec:
   selector:
     matchLabels:      
@@ -987,13 +987,13 @@ spec:
   template:
     metadata:
       labels:        
-        helm.sh/chart: kube-state-metrics-6.1.0
+        helm.sh/chart: kube-state-metrics-6.3.0
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: metrics
         app.kubernetes.io/part-of: kube-state-metrics
         app.kubernetes.io/name: kube-state-metrics
         app.kubernetes.io/instance: test
-        app.kubernetes.io/version: "2.16.0"
+        app.kubernetes.io/version: "2.17.0"
     spec:
       automountServiceAccountToken: true
       hostNetwork: false
@@ -1012,10 +1012,10 @@ spec:
         - --port=8080
         - --resources=certificatesigningrequests,configmaps,cronjobs,daemonsets,deployments,endpoints,horizontalpodautoscalers,ingresses,jobs,leases,limitranges,mutatingwebhookconfigurations,namespaces,networkpolicies,nodes,persistentvolumeclaims,persistentvolumes,poddisruptionbudgets,pods,replicasets,replicationcontrollers,resourcequotas,secrets,services,statefulsets,storageclasses,validatingwebhookconfigurations,volumeattachments
         imagePullPolicy: IfNotPresent
-        image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.16.0
+        image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
         ports:
         - containerPort: 8080
-          name: "http"
+          name: http
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -1054,10 +1054,10 @@ metadata:
   name: test-alloy-operator
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.4
+    helm.sh/chart: alloy-operator-0.3.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.1.2"
+    app.kubernetes.io/version: "1.2.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -1068,22 +1068,23 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: alloy-operator-0.3.4
+        helm.sh/chart: alloy-operator-0.3.9
         app.kubernetes.io/name: alloy-operator
         app.kubernetes.io/instance: test
-        app.kubernetes.io/version: "1.1.2"
+        app.kubernetes.io/version: "1.2.1"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: test-alloy-operator
       containers:
         - name: alloy-operator
-          image: "ghcr.io/grafana/alloy-operator:1.1.2"
+          image: "ghcr.io/grafana/alloy-operator:1.2.1"
           imagePullPolicy: IfNotPresent
           args:
-            - --leader-elect
-            - --leader-election-id=test-alloy-operator
             - --health-probe-bind-address=:8081
             - --metrics-bind-address=:8082
+            - --leader-elect
+            - --leader-election-id=test-alloy-operator
+
           ports:
             - name: http
               containerPort: 8081

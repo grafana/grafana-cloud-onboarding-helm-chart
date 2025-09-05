@@ -25,7 +25,7 @@ dependencies:
     version: 0.6.1
     repository: https://sustainable-computing-io.github.io/kepler-helm-chart
     condition: kepler.enabled
-  - name: opencost
-    version: 2.2.7
-    repository: https://opencost.github.io/opencost-helm-chart
-    condition: opencost.enabled
+#  - name: opencost
+#    version: 2.2.7
+#    repository: https://opencost.github.io/opencost-helm-chart
+#    condition: opencost.enabled

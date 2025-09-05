@@ -1143,7 +1143,7 @@ spec:
             "platform" = "kubernetes",
             "release" = "test",
             "source" = "grafana-cloud-onboarding",
-            "sourceVersion" = "0.2.1",
+            "sourceVersion" = "0.2.2",
             "workloadName" = "alloy-daemon",
             "workloadType" = "daemonset",
           }

@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.2.2
+
+*   Update Alloy Operator to 0.3.9 (@petewall)
+*   Update kube-state-metrics to 6.3.0 (@petewall)
+*   Update Node Exporter to 4.47.3 (@petewall)
+*   Update Windows Exporter to 0.12.1 (@petewall)
+*   Remote Config to allow TLS and urlFrom settings (@petewall)
+
 ## 0.2.1
 
 *   Update Alloy Operator to 0.3.8 (@petewall)

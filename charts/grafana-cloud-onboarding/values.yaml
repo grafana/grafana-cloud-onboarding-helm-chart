@@ -68,7 +68,7 @@ additionalComponents:
   windows-exporter:
     enabled: true
 
-  # kepler is used to collect metrics about power usage of kubenetes cluster resources.
+  # kepler is used to collect metrics about power usage of Kubernetes cluster resources.
   # Installed by default, so you can dynamically enable or disable it through Fleet Management remote configuration.
   kepler:
     enabled: true

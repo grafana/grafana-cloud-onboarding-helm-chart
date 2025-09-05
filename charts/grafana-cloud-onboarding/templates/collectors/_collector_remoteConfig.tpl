@@ -18,7 +18,11 @@ workloadType: {{ .collectorValues.controller.type }}
   {{- end }}
 remotecfg {
   id = sys.env("GCLOUD_FM_COLLECTOR_ID")
+{{- if .urlFrom }}
+  url = {{ .urlFrom }}
+{{- else }}
   url = {{ .url | quote }}
+{{- end }}
 {{- if .proxyURL }}
   proxy_url = {{ .proxyURL | quote }}
 {{- end }}
@@ -41,10 +45,32 @@ remotecfg {
     password = {{ include "secrets.read" (dict "object" . "key" "auth.password") }}
   }
 {{- end }}
+{{- if .tls }}
+  tls_config {
+    insecure_skip_verify = {{ .tls.insecureSkipVerify | default false }}
+    {{- if .tls.caFile }}
+    ca_file = {{ .tls.caFile | quote }}
+    {{- else if eq (include "secrets.usesSecret" (dict "object" . "key" "tls.ca")) "true" }}
+    ca_pem = {{ include "secrets.read" (dict "object" . "key" "tls.ca" "nonsensitive" true) }}
+    {{- end }}
+    {{- if .tls.certFile }}
+    cert_file = {{ .tls.certFile | quote }}
+    {{- else if eq (include "secrets.usesSecret" (dict "object" . "key" "tls.cert")) "true" }}
+    cert_pem = {{ include "secrets.read" (dict "object" . "key" "tls.cert" "nonsensitive" true) }}
+    {{- end }}
+    {{- if .tls.keyFile }}
+    key_file = {{ .tls.keyFile | quote }}
+    {{- else if eq (include "secrets.usesSecret" (dict "object" . "key" "tls.key")) "true" }}
+    key_pem = {{ include "secrets.read" (dict "object" . "key" "tls.key") }}
+    {{- end }}
+  }
+{{- end }}
   poll_frequency = {{ .pollFrequency | quote }}
   attributes = {
 {{- range $key, $value := $attributes }}
+  {{- if $value }}
     {{ $key | quote }} = {{ $value | quote }},
+  {{- end }}
 {{- end }}
   }
 }
@@ -54,4 +80,7 @@ remotecfg {
 {{- define "secrets.list.fleetManagement" -}}
 - auth.username
 - auth.password
+- tls.ca
+- tls.cert
+- tls.key
 {{- end -}}

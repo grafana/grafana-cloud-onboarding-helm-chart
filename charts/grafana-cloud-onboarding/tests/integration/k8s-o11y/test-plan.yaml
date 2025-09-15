@@ -12,6 +12,8 @@ cluster:
 
 dependencies:
   - file: ../grafana-cloud-credentials.yaml
+  - file: ../grafana-cloud-credentials.yaml
+    namespace: toolbox
 
 tests:
   - type: query-test
@@ -26,7 +28,7 @@ tests:
             # Beyla Surveyor
             - query: survey_info{k8s_cluster_name="k8s-o11y-test", k8s_deployment_name="k8s-o11y-kube-state-metrics"}
               type: promql
-            - query: survey_info{k8s_cluster_name="k8s-o11y-test", k8s_daemonset_name="k8s-o11y-node-exporter"}
+            - query: survey_info{k8s_cluster_name="k8s-o11y-test", k8s_daemonset_name="k8s-o11y-prometheus-node-exporter"}
               type: promql
 
             # kube-state-metrics

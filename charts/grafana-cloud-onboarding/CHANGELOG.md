@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.3.0
+
+*   Add uninstallation hook to ensure clean removal of Alloy resources (@petewall)
+
 ## 0.2.2
 
 *   Update Alloy Operator to 0.3.9 (@petewall)

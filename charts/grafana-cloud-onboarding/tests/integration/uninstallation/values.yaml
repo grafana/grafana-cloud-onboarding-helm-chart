@@ -1,0 +1,23 @@
+cluster:
+  name: uninstallation-test
+
+grafanaCloud:
+  fleetManagement:
+    url: https://fleet-management-prod-008.grafana.net
+    auth:
+      type: basic
+      usernameKey: fleetManagementUsername
+      passwordKey: fleetManagementPassword
+    secret:
+      create: false
+      name: grafana-cloud
+      namespace: toolbox
+
+    extraAttributes:
+      test: k8s-o11y
+
+collectors:
+  alloy-daemon:
+    image:
+      repository: grafana/alloy-dev
+      tag: latest

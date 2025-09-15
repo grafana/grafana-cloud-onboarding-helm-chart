@@ -75,7 +75,6 @@ tasks:
         echo "---" > grafana-cloud-credentials.yaml
         echo "# yamllint disable rule:line-length" >> grafana-cloud-credentials.yaml
         kubectl create secret generic grafana-cloud \
-          --namespace toolbox \
           --from-literal=fleetManagementUsername=$(op --account grafana.1password.com read  "op://Kubernetes Monitoring/helmchart Fleet Management/username") \
           --from-literal=fleetManagementPassword=$(op --account grafana.1password.com read  "op://Kubernetes Monitoring/helmchart Fleet Management/password") \
           --from-literal=PROMETHEUS_USER=$(op --account grafana.1password.com read  "op://Kubernetes Monitoring/helmchart Prometheus/username") \

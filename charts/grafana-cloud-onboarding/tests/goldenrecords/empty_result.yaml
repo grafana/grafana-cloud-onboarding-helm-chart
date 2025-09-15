@@ -1143,7 +1143,7 @@ spec:
             "platform" = "kubernetes",
             "release" = "test",
             "source" = "grafana-cloud-onboarding",
-            "sourceVersion" = "0.2.2",
+            "sourceVersion" = "0.3.0",
             "workloadName" = "alloy-daemon",
             "workloadType" = "daemonset",
           }
@@ -1333,3 +1333,201 @@ spec:
     metricRelabelings: []
     relabelings: []
     tlsConfig: {}
+---
+# Source: grafana-cloud-onboarding/templates/hooks/post-install_add-finalizer.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: test-grafana-cloud-onboarding-add-finalizer
+  namespace: test-namespace
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "5"
+---
+# Source: grafana-cloud-onboarding/templates/hooks/pre-delete_remove-alloy-and-finalizer.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: test-grafana-cloud-onboarding-remove-alloy-and-finalizer
+  namespace: test-namespace
+  annotations:
+    helm.sh/hook: pre-delete
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+---
+# Source: grafana-cloud-onboarding/templates/hooks/post-install_add-finalizer.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: test-grafana-cloud-onboarding-add-finalizer
+  namespace: test-namespace
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "5"
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch", "patch"]
+---
+# Source: grafana-cloud-onboarding/templates/hooks/pre-delete_remove-alloy-and-finalizer.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: test-grafana-cloud-onboarding-remove-alloy-and-finalizer
+  namespace: test-namespace
+  annotations:
+    helm.sh/hook: pre-delete
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch", "patch"]
+  - apiGroups: ["collectors.grafana.com"]
+    resources: ["alloys"]
+    verbs: ["get", "list", "watch", "delete"]
+---
+# Source: grafana-cloud-onboarding/templates/hooks/post-install_add-finalizer.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: test-grafana-cloud-onboarding-add-finalizer
+  namespace: test-namespace
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "5"
+subjects:
+  - kind: ServiceAccount
+    name: test-grafana-cloud-onboarding-add-finalizer
+    namespace: test-namespace
+roleRef:
+  kind: Role
+  name: test-grafana-cloud-onboarding-add-finalizer
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: grafana-cloud-onboarding/templates/hooks/pre-delete_remove-alloy-and-finalizer.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: test-grafana-cloud-onboarding-remove-alloy-and-finalizer
+  namespace: test-namespace
+  annotations:
+    helm.sh/hook: pre-delete
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+subjects:
+  - kind: ServiceAccount
+    name: test-grafana-cloud-onboarding-remove-alloy-and-finalizer
+    namespace: test-namespace
+roleRef:
+  kind: Role
+  name: test-grafana-cloud-onboarding-remove-alloy-and-finalizer
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: grafana-cloud-onboarding/templates/hooks/post-install_add-finalizer.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: test-grafana-cloud-onboarding-add-finalizer
+  namespace: test-namespace
+  labels:
+    app.kubernetes.io/name: test-grafana-cloud-onboarding-add-finalizer
+    app.kubernetes.io/instance: test
+    helm.sh/chart: grafana-cloud-onboarding-0.3.0
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "15"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 300
+  backoffLimit: 3
+  template:
+    metadata:
+      name: test-grafana-cloud-onboarding-add-finalizer
+      labels:
+        app.kubernetes.io/name: test-grafana-cloud-onboarding
+        app.kubernetes.io/instance: test
+        linkerd.io/inject: disabled
+        sidecar.istio.io/inject: "false"
+    spec:
+      restartPolicy: Never
+      nodeSelector:
+        kubernetes.io/os: linux
+      serviceAccountName: test-grafana-cloud-onboarding-add-finalizer
+      containers:
+        - name: add-finalizers
+          image: "ghcr.io/grafana/helm-chart-toolbox-kubectl:0.1.1"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+            - -ce
+            - |
+              kubectl patch \
+                --namespace=test-namespace \
+                --patch='{"metadata":{"finalizers":["k8s.grafana.com/finalizer"]}}' \
+                deployment/test-alloy-operator
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 4242
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+---
+# Source: grafana-cloud-onboarding/templates/hooks/pre-delete_remove-alloy-and-finalizer.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: test-grafana-cloud-onboarding-remove-alloy-and-finalizer
+  namespace: test-namespace
+  labels:
+    app.kubernetes.io/name: test-grafana-cloud-onboarding-remove-alloy-and-finalizer
+    app.kubernetes.io/instance: test
+    helm.sh/chart: grafana-cloud-onboarding-0.3.0
+  annotations:
+    helm.sh/hook: pre-delete
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 300
+  backoffLimit: 3
+  template:
+    metadata:
+      name: test-grafana-cloud-onboarding-remove-alloy-and-finalizer
+      labels:
+        app.kubernetes.io/name: test-grafana-cloud-onboarding
+        app.kubernetes.io/instance: test
+        linkerd.io/inject: disabled
+        sidecar.istio.io/inject: "false"
+    spec:
+      restartPolicy: Never
+      nodeSelector:
+        kubernetes.io/os: linux
+      serviceAccountName: test-grafana-cloud-onboarding-remove-alloy-and-finalizer
+      containers:
+        - name: remove-finalizers
+          image: "ghcr.io/grafana/helm-chart-toolbox-kubectl:0.1.1"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+            - -ce
+            - |
+              echo "Deleting Alloy instance: alloy/test-alloy-daemon..."
+              kubectl delete alloy/test-alloy-daemon --ignore-not-found=true --wait
+              kubectl wait --for=delete alloy/test-alloy-daemon --timeout=60s || echo "Timed out waiting for deletion of alloy/test-alloy-daemon or it may not exist."
+
+              kubectl patch \
+                --namespace=test-namespace \
+                --type json \
+                --patch='[{"op": "remove", "path": "/metadata/finalizers"}]' \
+                deployment/test-alloy-operator
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 4242
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault

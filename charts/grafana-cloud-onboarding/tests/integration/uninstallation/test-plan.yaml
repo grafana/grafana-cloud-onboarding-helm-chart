@@ -1,0 +1,35 @@
+---
+apiVersion: helm-chart-toolbox.grafana.com/v1
+kind: TestPlan
+name: uninstallation
+
+subject:
+  path: ../../..
+  releaseName: grafana-cloud
+  valuesFile: values.yaml
+  set:
+    - key: "cluster.name"
+      valueFrom: clusterName
+  uninstall: true
+
+cluster:
+  type: kind
+  appendRandomNumber: true
+
+dependencies:
+  - file: ../grafana-cloud-credentials.yaml
+
+tests:
+  - type: kubernetes-objects-test
+    values:
+      checks:
+        - {name: grafana-cloud-alloy-daemon, kind: DaemonSet, namespace: default, expect: {count: 0}}
+        - {name: grafana-cloud-alloy-daemon, kind: Service, namespace: default, expect: {count: 0}}
+        - {name: grafana-cloud-alloy-operator, kind: Deployment, namespace: default, expect: {count: 0}}
+        - {name: grafana-cloud-alloy-operator, kind: Service, namespace: default, expect: {count: 0}}
+        - {name: grafana-cloud-kepler, kind: DaemonSet, namespace: default, expect: {count: 0}}
+        - {name: grafana-cloud-kepler, kind: Service, namespace: default, expect: {count: 0}}
+        - {name: grafana-cloud-kube-state-metrics, kind: Deployment, namespace: default, expect: {count: 0}}
+        - {name: grafana-cloud-kube-state-metrics, kind: Service, namespace: default, expect: {count: 0}}
+        - {name: grafana-cloud-prometheus-node-exporter, kind: DaemonSet, namespace: default, expect: {count: 0}}
+        - {name: grafana-cloud-prometheus-node-exporter, kind: Service, namespace: default, expect: {count: 0}}

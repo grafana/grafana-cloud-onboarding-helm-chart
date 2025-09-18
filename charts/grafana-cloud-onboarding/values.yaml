@@ -22,7 +22,9 @@ grafanaCloud:
     extraAttributes: {}
 
 # The list of collectors to deploy. This is an object, so you can define multiple collectors.
-# Supports all fields from the Alloy CRD (which is also the Alloy Helm chart).
+# Each collectors.<name> field will deploy Alloy helm chart using <name>.
+# Under <name> field you can configure all options from the Alloy CRD, which matches the Alloy Helm chart values.yaml.
+# To see available fields, consult Alloy helm chart's values.yaml: https://github.com/grafana/alloy/tree/main/operations/helm/charts/alloy
 collectors:
   alloy-daemon:
     # Additional attributes to send to Fleet Management.

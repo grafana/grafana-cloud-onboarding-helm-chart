@@ -8,7 +8,18 @@ tasks:
 
   update-deps:
     desc: Update the dependencies
+    cmds:
+      - task: update-main-deps
+      - task: update-additional-deps
+
+  update-main-deps:
+    desc: Update the dependencies for the main chart
     dir: charts/grafana-cloud-onboarding
+    cmds:
+      - helm dependency update
+  update-additional-deps:
+    desc: Update the dependencies for the additional components chart
+    dir: charts/grafana-cloud-onboarding/charts/additional-components
     cmds:
       - helm dependency update
 

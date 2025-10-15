@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+*   Update Alloy Operator and Node Exporter (@petewall)
+
 ## 0.3.0
 
 *   Add uninstallation hook to ensure clean removal of Alloy resources (@petewall)

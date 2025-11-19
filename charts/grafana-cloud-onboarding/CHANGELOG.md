@@ -3,6 +3,7 @@
 ## Unreleased
 
 *   Update Alloy Operator and Node Exporter (@petewall)
+*   Update Node Exporter and kube-state-metrics (@petewall)
 
 ## 0.3.0
 

@@ -1148,7 +1148,7 @@ spec:
             username = convert.nonsensitive(remote.kubernetes.secret.grafana_cloud_fleet_management.data["username"])
             password = remote.kubernetes.secret.grafana_cloud_fleet_management.data["password"]
           }
-          poll_frequency = "5m"
+          poll_frequency = "30s"
           attributes = {
             "namespace" = "test-namespace",
             "platform" = "kubernetes",

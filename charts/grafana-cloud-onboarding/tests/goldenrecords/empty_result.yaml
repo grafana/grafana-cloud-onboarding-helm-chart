@@ -1148,13 +1148,13 @@ spec:
             username = convert.nonsensitive(remote.kubernetes.secret.grafana_cloud_fleet_management.data["username"])
             password = remote.kubernetes.secret.grafana_cloud_fleet_management.data["password"]
           }
-          poll_frequency = "5m"
+          poll_frequency = "30s"
           attributes = {
             "namespace" = "test-namespace",
             "platform" = "kubernetes",
             "release" = "test",
             "source" = "grafana-cloud-onboarding",
-            "sourceVersion" = "0.3.0",
+            "sourceVersion" = "0.3.1",
             "workloadName" = "alloy-daemon",
             "workloadType" = "daemonset",
           }
@@ -1444,7 +1444,7 @@ metadata:
   labels:
     app.kubernetes.io/name: test-grafana-cloud-onboarding-add-finalizer
     app.kubernetes.io/instance: test
-    helm.sh/chart: grafana-cloud-onboarding-0.3.0
+    helm.sh/chart: grafana-cloud-onboarding-0.3.1
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "15"
@@ -1496,7 +1496,7 @@ metadata:
   labels:
     app.kubernetes.io/name: test-grafana-cloud-onboarding-remove-alloy-and-finalizer
     app.kubernetes.io/instance: test
-    helm.sh/chart: grafana-cloud-onboarding-0.3.0
+    helm.sh/chart: grafana-cloud-onboarding-0.3.1
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded

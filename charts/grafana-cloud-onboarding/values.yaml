@@ -15,7 +15,7 @@ grafanaCloud:
 
     # -- The frequency at which to poll the remote config server for updates.
     # @section -- Remote Configuration
-    pollFrequency: 5m
+    pollFrequency: 30s
 
     # -- Attributes to be added to all collectors when requesting configuration.
     # @section -- Remote Configuration

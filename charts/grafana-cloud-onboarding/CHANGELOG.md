@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.3.1
 
+*   Change Fleet Management polling interval to 30s (@petewall)
 *   Update Alloy Operator and Node Exporter (@petewall)
 *   Update Node Exporter and kube-state-metrics (@petewall)
 

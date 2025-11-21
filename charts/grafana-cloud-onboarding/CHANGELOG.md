@@ -4,6 +4,7 @@
 
 *   Removed the "additionalComponents" chart in favor on a single chart (@petewall)
 *   Added beyla-k8s-cache as additional component (@skl)
+*   Update Alloy Operator to 0.3.13 (@skl)
 
 ## 0.3.1
 

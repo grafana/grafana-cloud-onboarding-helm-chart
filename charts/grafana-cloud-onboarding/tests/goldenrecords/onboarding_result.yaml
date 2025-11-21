@@ -1,5 +1,21 @@
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kepler/templates/serviceaccount.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/beyla/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: test-beyla
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: beyla-1.10.0
+    app.kubernetes.io/name: beyla
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: beyla
+    app.kubernetes.io/component: rbac
+automountServiceAccountToken: true
+---
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/kepler/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -12,7 +28,7 @@ metadata:
     app.kubernetes.io/version: "release-0.8.0"
     app.kubernetes.io/managed-by: Helm
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kube-state-metrics/templates/serviceaccount.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/kube-state-metrics/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 automountServiceAccountToken: true
@@ -28,7 +44,7 @@ metadata:
   name: test-kube-state-metrics
   namespace: test-namespace
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/prometheus-node-exporter/templates/serviceaccount.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/prometheus-node-exporter/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -44,7 +60,7 @@ metadata:
     app.kubernetes.io/version: "1.10.2"
 automountServiceAccountToken: false
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/prometheus-windows-exporter/templates/serviceaccount.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/prometheus-windows-exporter/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -84,7 +100,39 @@ data:
   username: "MTIzNDU2"
   password: "Z2xjX3RoaXNpc215cGFzc3dvcmQ="
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/prometheus-windows-exporter/templates/config.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/beyla/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-beyla
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: beyla-1.10.0
+    app.kubernetes.io/name: beyla
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: beyla
+    app.kubernetes.io/component: config
+data:
+  beyla-config.yml: |
+    discovery:
+      instrument:
+        - k8s_namespace: "*"
+    attributes:
+      kubernetes:
+        enable: true
+    filter:
+      network:
+        k8s_dst_owner_name:
+          not_match: '{kube*,*jaeger-agent*,*prometheus*,*promtail*,*grafana-agent*}'
+        k8s_src_owner_name:
+          not_match: '{kube*,*jaeger-agent*,*prometheus*,*promtail*,*grafana-agent*}'
+    prometheus_export:
+      path: /metrics
+      port: 9090
+---
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/prometheus-windows-exporter/templates/config.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -103,7 +151,28 @@ data:
     collectors:
       enabled: '[defaults],memory,container'
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kepler/templates/rolebinding.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/beyla/templates/cluster-role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: test-beyla
+  labels:
+    helm.sh/chart: beyla-1.10.0
+    app.kubernetes.io/name: beyla
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: beyla
+    app.kubernetes.io/component: rbac
+rules:
+  - apiGroups: [ "apps" ]
+    resources: [ "replicasets" ]
+    verbs: [ "list", "watch" ]
+  - apiGroups: [ "" ]
+    resources: [ "pods", "services", "nodes" ]
+    verbs: [ "list", "watch", "get" ]
+---
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/kepler/templates/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -120,7 +189,7 @@ rules:
       - watch
       - list
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kube-state-metrics/templates/role.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/kube-state-metrics/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -333,7 +402,29 @@ rules:
     resources: ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
     verbs: ["*"]
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kepler/templates/rolebinding.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/beyla/templates/cluster-role-binding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: test-beyla
+  labels:
+    helm.sh/chart: beyla-1.10.0
+    app.kubernetes.io/name: beyla
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: beyla
+    app.kubernetes.io/component: rbac
+subjects:
+  - kind: ServiceAccount
+    name: test-beyla
+    namespace: test-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: test-beyla
+---
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/kepler/templates/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -347,7 +438,7 @@ subjects:
     name: test-kepler
     namespace: test-namespace
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kube-state-metrics/templates/clusterrolebinding.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/kube-state-metrics/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -475,7 +566,30 @@ subjects:
     name: test-alloy-operator
     namespace: test-namespace
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kepler/templates/service.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/beyla/templates/cache-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: beyla-k8s-cache
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: beyla-1.10.0
+    app.kubernetes.io/name: beyla-k8s-cache
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: beyla
+    app.kubernetes.io/component: networking
+spec:
+  ports:
+    - port: 50055
+      protocol: TCP
+      targetPort: grpc
+      name: grpc
+  selector:
+    app.kubernetes.io/name: beyla-k8s-cache
+---
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/kepler/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -498,7 +612,7 @@ spec:
     app.kubernetes.io/name: kepler
     app.kubernetes.io/component: exporter
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kube-state-metrics/templates/service.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/kube-state-metrics/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -526,7 +640,7 @@ spec:
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/instance: test
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/prometheus-node-exporter/templates/service.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/prometheus-node-exporter/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -553,7 +667,7 @@ spec:
     app.kubernetes.io/name: prometheus-node-exporter
     app.kubernetes.io/instance: test
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/prometheus-windows-exporter/templates/service.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/prometheus-windows-exporter/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -606,7 +720,7 @@ spec:
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kepler/templates/daemonset.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/kepler/templates/daemonset.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -735,7 +849,7 @@ spec:
         - effect: NoSchedule
           key: node-role.kubernetes.io/control-plane
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/prometheus-node-exporter/templates/daemonset.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/prometheus-node-exporter/templates/daemonset.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -863,7 +977,7 @@ spec:
           hostPath:
             path: /
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/prometheus-windows-exporter/templates/daemonset.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/prometheus-windows-exporter/templates/daemonset.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -961,7 +1075,56 @@ spec:
           configMap:
             name: test-prometheus-windows-exporter
 ---
-# Source: grafana-cloud-onboarding/charts/additionalComponents/charts/kube-state-metrics/templates/deployment.yaml
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/beyla/templates/cache-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beyla-k8s-cache
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: beyla-1.10.0
+    app.kubernetes.io/name: beyla-k8s-cache
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: beyla
+    app.kubernetes.io/component: workload
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: beyla-k8s-cache
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: beyla-1.10.0
+        app.kubernetes.io/name: beyla-k8s-cache
+        app.kubernetes.io/instance: test
+        app.kubernetes.io/version: "2.7.5"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/part-of: beyla
+    spec:
+      serviceAccountName: test-beyla
+      containers:
+        - name: beyla-cache
+          image: docker.io/grafana/beyla-k8s-cache:2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 50055
+              protocol: TCP
+              name: grpc
+          resources:
+            limits:
+              cpu: "3.0"
+              memory: 2Gi
+            requests:
+              cpu: "0.1"
+              memory: 256Mi
+          env:
+            - name: BEYLA_K8S_CACHE_PORT
+              value: "50055"
+---
+# Source: grafana-cloud-onboarding/charts/additional-components/charts/kube-state-metrics/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:

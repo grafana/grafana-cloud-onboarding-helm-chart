@@ -1,3 +1,20 @@
+# Beyla provides service discovery and auto-instrumentation.
+beyla:
+  # Whether to deploy the Beyla standalone DaemonSet. As we're using the Beyla
+  # embedded into Alloy (via the beyla.ebpf component), we set this to false.
+  # @section beyla
+  enabled: false
+
+  k8sCache:
+    # The number of beyla-k8s-cache replicas, set to 0 to disable. Beyla's K8s
+    # Cache deployment reduces load on the Kubernetes API server.
+    # @section beyla
+    replicas: 0
+
+    image:
+      # Match major version of Beyla embedded into Alloy.
+      tag: "2"
+
 # kube-state-metrics is for gathering cluster state metrics.
 kube-state-metrics:
   # Deploy kube-state-metrics.

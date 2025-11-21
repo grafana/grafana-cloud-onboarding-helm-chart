@@ -54,7 +54,22 @@ collectors:
               type: DirectoryOrCreate
 
 # Extra components to deploy to the cluster to provide additional metric sources.
-additionalComponents:
+additional-components:
+  beyla:
+    k8sCache:
+      # Use 1 replica per 50 nodes as a starting point.
+      replicas: 1
+
+      resources:
+        requests:
+          cpu: "0.1"
+          memory: "256Mi"
+
+        # Generous limits to allow for startup spike.
+        limits:
+          cpu: "3.0"
+          memory: "2Gi"
+
   # kube-state-metrics can be used to get metrics about the state of the kubernetes cluster health and performance.
   # Installed by default, so you can dynamically enable or disable it through Fleet Management remote configuration.
   kube-state-metrics:

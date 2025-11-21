@@ -66,10 +66,10 @@ metadata:
   name: test-alloy-operator
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.11
+    helm.sh/chart: alloy-operator-0.3.12
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.4.0"
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
 ---
@@ -281,10 +281,10 @@ kind: ClusterRole
 metadata:
   name: test-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.3.11
+    helm.sh/chart: alloy-operator-0.3.12
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.4.0"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -375,10 +375,10 @@ kind: ClusterRoleBinding
 metadata:
   name: test-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.3.11
+    helm.sh/chart: alloy-operator-0.3.12
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.4.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -395,10 +395,10 @@ kind: ClusterRoleBinding
 metadata:
   name: test-alloy-operator
   labels:
-    helm.sh/chart: alloy-operator-0.3.11
+    helm.sh/chart: alloy-operator-0.3.12
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.4.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -416,10 +416,10 @@ metadata:
   name: test-alloy-operator-leader-election-role
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.11
+    helm.sh/chart: alloy-operator-0.3.12
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.4.0"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -461,10 +461,10 @@ metadata:
   name: test-alloy-operator-leader-election-rolebinding
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.11
+    helm.sh/chart: alloy-operator-0.3.12
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.4.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -586,10 +586,10 @@ metadata:
   name: test-alloy-operator
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.11
+    helm.sh/chart: alloy-operator-0.3.12
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.4.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -1054,10 +1054,10 @@ metadata:
   name: test-alloy-operator
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.11
+    helm.sh/chart: alloy-operator-0.3.12
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.4.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -1068,10 +1068,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: alloy-operator-0.3.11
+        helm.sh/chart: alloy-operator-0.3.12
         app.kubernetes.io/name: alloy-operator
         app.kubernetes.io/instance: test
-        app.kubernetes.io/version: "1.3.0"
+        app.kubernetes.io/version: "1.4.0"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: test-alloy-operator
@@ -1084,7 +1084,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: alloy-operator
-          image: "ghcr.io/grafana/alloy-operator:1.3.0"
+          image: "ghcr.io/grafana/alloy-operator:1.4.0"
           imagePullPolicy: IfNotPresent
           args:
             - --health-probe-bind-address=:8081
@@ -1154,7 +1154,7 @@ spec:
             "platform" = "kubernetes",
             "release" = "test",
             "source" = "grafana-cloud-onboarding",
-            "sourceVersion" = "0.3.1",
+            "sourceVersion" = "0.3.2",
             "workloadName" = "alloy-daemon",
             "workloadType" = "daemonset",
           }
@@ -1444,7 +1444,7 @@ metadata:
   labels:
     app.kubernetes.io/name: test-grafana-cloud-onboarding-add-finalizer
     app.kubernetes.io/instance: test
-    helm.sh/chart: grafana-cloud-onboarding-0.3.1
+    helm.sh/chart: grafana-cloud-onboarding-0.3.2
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "15"
@@ -1496,7 +1496,7 @@ metadata:
   labels:
     app.kubernetes.io/name: test-grafana-cloud-onboarding-remove-alloy-and-finalizer
     app.kubernetes.io/instance: test
-    helm.sh/chart: grafana-cloud-onboarding-0.3.1
+    helm.sh/chart: grafana-cloud-onboarding-0.3.2
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded

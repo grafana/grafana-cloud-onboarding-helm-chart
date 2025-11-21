@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.2
+
+*   Update Alloy Operator to 0.3.12 (@skl)
+
 ## 0.3.1
 
 *   Change Fleet Management polling interval to 30s (@petewall)

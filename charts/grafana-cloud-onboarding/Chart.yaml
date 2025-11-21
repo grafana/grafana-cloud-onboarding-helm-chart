@@ -2,11 +2,11 @@ apiVersion: v2
 name: grafana-cloud-onboarding
 description: A Helm chart for Grafana Cloud Onboarding on Kubernetes
 type: application
-version: 0.3.1
+version: 0.3.2
 appVersion: 1.16.0
 dependencies:
   - name: alloy-operator
-    version: 0.3.11
+    version: 0.3.12
     repository: https://grafana.github.io/helm-charts
     condition: alloy-operator.enabled
   - alias: additionalComponents

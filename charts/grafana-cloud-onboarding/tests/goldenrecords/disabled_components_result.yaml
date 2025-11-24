@@ -13,6 +13,22 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
 ---
+# Source: grafana-cloud-onboarding/charts/beyla/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: test-beyla
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: beyla-1.10.0
+    app.kubernetes.io/name: beyla
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: beyla
+    app.kubernetes.io/component: rbac
+automountServiceAccountToken: true
+---
 # Source: grafana-cloud-onboarding/templates/fleet_management_secret.yaml
 apiVersion: v1
 kind: Secret
@@ -23,6 +39,38 @@ type: Opaque
 data:
   username: "MTIzNDU2"
   password: "Z2xjX3RoaXNpc215cGFzc3dvcmQ="
+---
+# Source: grafana-cloud-onboarding/charts/beyla/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-beyla
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: beyla-1.10.0
+    app.kubernetes.io/name: beyla
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: beyla
+    app.kubernetes.io/component: config
+data:
+  beyla-config.yml: |
+    discovery:
+      instrument:
+        - k8s_namespace: "*"
+    attributes:
+      kubernetes:
+        enable: true
+    filter:
+      network:
+        k8s_dst_owner_name:
+          not_match: '{kube*,*jaeger-agent*,*prometheus*,*promtail*,*grafana-agent*}'
+        k8s_src_owner_name:
+          not_match: '{kube*,*jaeger-agent*,*prometheus*,*promtail*,*grafana-agent*}'
+    prometheus_export:
+      path: /metrics
+      port: 9090
 ---
 # Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-manager.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -82,6 +130,27 @@ rules:
     resources: ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
     verbs: ["*"]
 ---
+# Source: grafana-cloud-onboarding/charts/beyla/templates/cluster-role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: test-beyla
+  labels:
+    helm.sh/chart: beyla-1.10.0
+    app.kubernetes.io/name: beyla
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: beyla
+    app.kubernetes.io/component: rbac
+rules:
+  - apiGroups: [ "apps" ]
+    resources: [ "replicasets" ]
+    verbs: [ "list", "watch" ]
+  - apiGroups: [ "" ]
+    resources: [ "pods", "services", "nodes" ]
+    verbs: [ "list", "watch", "get" ]
+---
 # Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-manager.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -121,6 +190,28 @@ subjects:
   - kind: ServiceAccount
     name: test-alloy-operator
     namespace: test-namespace
+---
+# Source: grafana-cloud-onboarding/charts/beyla/templates/cluster-role-binding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: test-beyla
+  labels:
+    helm.sh/chart: beyla-1.10.0
+    app.kubernetes.io/name: beyla
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: beyla
+    app.kubernetes.io/component: rbac
+subjects:
+  - kind: ServiceAccount
+    name: test-beyla
+    namespace: test-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: test-beyla
 ---
 # Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/leader-election.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -215,6 +306,29 @@ spec:
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
 ---
+# Source: grafana-cloud-onboarding/charts/beyla/templates/cache-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: beyla-k8s-cache
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: beyla-1.10.0
+    app.kubernetes.io/name: beyla-k8s-cache
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: beyla
+    app.kubernetes.io/component: networking
+spec:
+  ports:
+    - port: 50055
+      protocol: TCP
+      targetPort: grpc
+      name: grpc
+  selector:
+    app.kubernetes.io/name: beyla-k8s-cache
+---
 # Source: grafana-cloud-onboarding/charts/alloy-operator/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -290,6 +404,55 @@ spec:
             readOnlyRootFilesystem: true
       nodeSelector:
         kubernetes.io/os: linux
+---
+# Source: grafana-cloud-onboarding/charts/beyla/templates/cache-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beyla-k8s-cache
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: beyla-1.10.0
+    app.kubernetes.io/name: beyla-k8s-cache
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: beyla
+    app.kubernetes.io/component: workload
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: beyla-k8s-cache
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: beyla-1.10.0
+        app.kubernetes.io/name: beyla-k8s-cache
+        app.kubernetes.io/instance: test
+        app.kubernetes.io/version: "2.7.5"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/part-of: beyla
+    spec:
+      serviceAccountName: test-beyla
+      containers:
+        - name: beyla-cache
+          image: docker.io/grafana/beyla-k8s-cache:2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 50055
+              protocol: TCP
+              name: grpc
+          resources:
+            limits:
+              cpu: "3.0"
+              memory: 2Gi
+            requests:
+              cpu: "0.1"
+              memory: 256Mi
+          env:
+            - name: BEYLA_K8S_CACHE_PORT
+              value: "50055"
 ---
 # Source: grafana-cloud-onboarding/templates/alloy.yaml
 apiVersion: collectors.grafana.com/v1alpha1

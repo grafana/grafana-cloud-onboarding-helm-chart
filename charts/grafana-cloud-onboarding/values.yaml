@@ -111,7 +111,7 @@ beyla:
     # The number of beyla-k8s-cache replicas, set to 0 to disable. Beyla's K8s
     # Cache deployment reduces load on the Kubernetes API server.
     # @section Beyla
-    replicas: 0
+    replicas: 1
 
     resources:
       requests:

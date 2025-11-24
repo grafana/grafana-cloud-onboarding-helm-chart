@@ -12,7 +12,6 @@ dependencies:
   - name: beyla
     version: 1.10.0
     repository: https://grafana.github.io/helm-charts
-    condition: beyla.enabled
   - name: kube-state-metrics
     version: 6.4.1
     repository: https://prometheus-community.github.io/helm-charts

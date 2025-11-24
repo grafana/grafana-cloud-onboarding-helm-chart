@@ -11,6 +11,7 @@ permissions: {}
 
 jobs:
   unit-test:
+    name: Unit Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
@@ -30,7 +31,7 @@ jobs:
     name: List integration tests
     runs-on: ubuntu-latest
     outputs:
-      tests: ${{ steps.list_tests.outputs.tests }}
+      tests: ${{ steps.list_integration_tests.outputs.tests }}
     steps:
       - name: Checkout code
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
@@ -38,7 +39,7 @@ jobs:
           persist-credentials: 'false'
 
       - name: List tests
-        id: list_tests
+        id: list_integration_tests
         working-directory: charts/grafana-cloud-onboarding
         env:
           LABELS: ${{ toJson(github.event.pull_request.labels.*.name) }}
@@ -59,10 +60,10 @@ jobs:
     name: Integration Test
     needs: list-integration-tests
     runs-on: ubuntu-latest
-    if: needs.list-tests.outputs.tests != '[]'
+    if: needs.list-integration-tests.outputs.tests != '[]'
     strategy:
       matrix:
-        test: ${{ fromJson(needs.list-tests.outputs.tests) }}
+        test: ${{ fromJson(needs.list-integration-tests.outputs.tests) }}
       fail-fast: false
     steps:
       - name: Checkout code

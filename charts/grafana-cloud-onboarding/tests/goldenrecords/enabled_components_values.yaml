@@ -1,0 +1,13 @@
+cluster:
+  name: "alloy-example"
+
+beyla:
+  enabled: true
+kube-state-metrics:
+  enabled: true
+prometheus-node-exporter:
+  enabled: true
+prometheus-windows-exporter:
+  enabled: true
+kepler:
+  enabled: true

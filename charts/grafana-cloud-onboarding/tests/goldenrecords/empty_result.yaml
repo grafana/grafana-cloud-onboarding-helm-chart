@@ -1,34 +1,19 @@
 ---
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/beyla/templates/serviceaccount.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: test-beyla
+  name: test-alloy-operator
   namespace: test-namespace
   labels:
-    helm.sh/chart: beyla-1.10.0
-    app.kubernetes.io/name: beyla
+    helm.sh/chart: alloy-operator-0.3.11
+    app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/version: "1.3.0"
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/part-of: beyla
-    app.kubernetes.io/component: rbac
 automountServiceAccountToken: true
 ---
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/kepler/templates/serviceaccount.yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: test-kepler
-  namespace: test-namespace
-  labels:
-    helm.sh/chart: kepler-0.6.1
-    app.kubernetes.io/name: kepler
-    app.kubernetes.io/component: exporter
-    app.kubernetes.io/version: "release-0.8.0"
-    app.kubernetes.io/managed-by: Helm
----
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/kube-state-metrics/templates/serviceaccount.yaml
+# Source: grafana-cloud-onboarding/charts/kube-state-metrics/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 automountServiceAccountToken: true
@@ -44,7 +29,7 @@ metadata:
   name: test-kube-state-metrics
   namespace: test-namespace
 ---
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/prometheus-node-exporter/templates/serviceaccount.yaml
+# Source: grafana-cloud-onboarding/charts/prometheus-node-exporter/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -60,35 +45,6 @@ metadata:
     app.kubernetes.io/version: "1.10.2"
 automountServiceAccountToken: false
 ---
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/prometheus-windows-exporter/templates/serviceaccount.yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: test-prometheus-windows-exporter
-  namespace: test-namespace
-  labels:
-    helm.sh/chart: prometheus-windows-exporter-0.12.2
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: prometheus-windows-exporter
-    app.kubernetes.io/name: prometheus-windows-exporter
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "0.31.3"
----
-# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/serviceaccount.yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: test-alloy-operator
-  namespace: test-namespace
-  labels:
-    helm.sh/chart: alloy-operator-0.3.11
-    app.kubernetes.io/name: alloy-operator
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.3.0"
-    app.kubernetes.io/managed-by: Helm
-automountServiceAccountToken: true
----
 # Source: grafana-cloud-onboarding/templates/fleet_management_secret.yaml
 apiVersion: v1
 kind: Secret
@@ -100,96 +56,65 @@ data:
   username: "MTIzNDU2"
   password: "Z2xjX3RoaXNpc215cGFzc3dvcmQ="
 ---
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/beyla/templates/configmap.yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: test-beyla
-  namespace: test-namespace
-  labels:
-    helm.sh/chart: beyla-1.10.0
-    app.kubernetes.io/name: beyla
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.7.5"
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/part-of: beyla
-    app.kubernetes.io/component: config
-data:
-  beyla-config.yml: |
-    discovery:
-      instrument:
-        - k8s_namespace: "*"
-    attributes:
-      kubernetes:
-        enable: true
-    filter:
-      network:
-        k8s_dst_owner_name:
-          not_match: '{kube*,*jaeger-agent*,*prometheus*,*promtail*,*grafana-agent*}'
-        k8s_src_owner_name:
-          not_match: '{kube*,*jaeger-agent*,*prometheus*,*promtail*,*grafana-agent*}'
-    prometheus_export:
-      path: /metrics
-      port: 9090
----
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/prometheus-windows-exporter/templates/config.yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: test-prometheus-windows-exporter
-  namespace: test-namespace
-  labels:
-    helm.sh/chart: prometheus-windows-exporter-0.12.2
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: prometheus-windows-exporter
-    app.kubernetes.io/name: prometheus-windows-exporter
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "0.31.3"
-data:
-  config.yml: |
-    collectors:
-      enabled: '[defaults],memory,container'
----
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/beyla/templates/cluster-role.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-manager.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: test-beyla
+  name: test-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: beyla-1.10.0
-    app.kubernetes.io/name: beyla
+    helm.sh/chart: alloy-operator-0.3.11
+    app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/version: "1.3.0"
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/part-of: beyla
-    app.kubernetes.io/component: rbac
 rules:
-  - apiGroups: [ "apps" ]
-    resources: [ "replicasets" ]
-    verbs: [ "list", "watch" ]
-  - apiGroups: [ "" ]
-    resources: [ "pods", "services", "nodes" ]
-    verbs: [ "list", "watch", "get" ]
----
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/kepler/templates/rolebinding.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: test-kepler-clusterrole
-rules:
-  - apiGroups: [""]
+  - apiGroups:
+      - collectors.grafana.com
     resources:
-      - nodes/metrics # access /metrics/resource
-      - nodes/proxy
-      - nodes/stats
-      - pods
+      - alloys
+      - alloys/status
+      - alloys/finalizers
     verbs:
+      - create
+      - delete
       - get
-      - watch
       - list
+      - patch
+      - update
+      - watch
 ---
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/kube-state-metrics/templates/role.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-objects.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: test-alloy-operator
+rules:
+  # Rules which allow the management of ConfigMaps, ServiceAccounts, and Services.
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets", "serviceaccounts", "services"]
+    verbs: ["*"]
+  # Rules which allow the management of DaemonSets, Deployments, and StatefulSets.
+  - apiGroups: ["apps"]
+    resources: ["daemonsets", "deployments", "statefulsets"]
+    verbs: ["*"]
+  # Rules which allow the management of Horizontal Pod Autoscalers.
+  - apiGroups: ["autoscaling"]
+    resources: ["horizontalpodautoscalers"]
+    verbs: ["*"]
+  # Rules which allow the management of Ingresses and NetworkPolicies.
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses", "networkpolicies"]
+    verbs: ["*"]
+  # Rules which allow the management of PodDisruptionBudgets.
+  - apiGroups: ["policy"]
+    resources: ["poddisruptionbudgets"]
+    verbs: ["*"]
+  # Rules which allow the management of ClusterRoles, ClusterRoleBindings, Roles, and RoleBindings.
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
+    verbs: ["*"]
+---
+# Source: grafana-cloud-onboarding/charts/kube-state-metrics/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -346,7 +271,7 @@ rules:
 ---
 # Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-manager.yaml
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: ClusterRoleBinding
 metadata:
   name: test-alloy-operator-alloy-manager
   labels:
@@ -355,90 +280,36 @@ metadata:
     app.kubernetes.io/instance: test
     app.kubernetes.io/version: "1.3.0"
     app.kubernetes.io/managed-by: Helm
-rules:
-  - apiGroups:
-      - collectors.grafana.com
-    resources:
-      - alloys
-      - alloys/status
-      - alloys/finalizers
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
----
-# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-objects.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: test-alloy-operator
-rules:
-  # Rules which allow the management of ConfigMaps, ServiceAccounts, and Services.
-  - apiGroups: [""]
-    resources: ["configmaps", "secrets", "serviceaccounts", "services"]
-    verbs: ["*"]
-  # Rules which allow the management of DaemonSets, Deployments, and StatefulSets.
-  - apiGroups: ["apps"]
-    resources: ["daemonsets", "deployments", "statefulsets"]
-    verbs: ["*"]
-  # Rules which allow the management of Horizontal Pod Autoscalers.
-  - apiGroups: ["autoscaling"]
-    resources: ["horizontalpodautoscalers"]
-    verbs: ["*"]
-  # Rules which allow the management of Ingresses and NetworkPolicies.
-  - apiGroups: ["networking.k8s.io"]
-    resources: ["ingresses", "networkpolicies"]
-    verbs: ["*"]
-  # Rules which allow the management of PodDisruptionBudgets.
-  - apiGroups: ["policy"]
-    resources: ["poddisruptionbudgets"]
-    verbs: ["*"]
-  # Rules which allow the management of ClusterRoles, ClusterRoleBindings, Roles, and RoleBindings.
-  - apiGroups: ["rbac.authorization.k8s.io"]
-    resources: ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
-    verbs: ["*"]
----
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/beyla/templates/cluster-role-binding.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: test-beyla
-  labels:
-    helm.sh/chart: beyla-1.10.0
-    app.kubernetes.io/name: beyla
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.7.5"
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/part-of: beyla
-    app.kubernetes.io/component: rbac
-subjects:
-  - kind: ServiceAccount
-    name: test-beyla
-    namespace: test-namespace
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: test-beyla
+  name: test-alloy-operator-alloy-manager
+subjects:
+  - kind: ServiceAccount
+    name: test-alloy-operator
+    namespace: test-namespace
 ---
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/kepler/templates/rolebinding.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-objects.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: test-kepler-clusterrole-binding
+  name: test-alloy-operator
+  labels:
+    helm.sh/chart: alloy-operator-0.3.11
+    app.kubernetes.io/name: alloy-operator
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/managed-by: Helm
 roleRef:
+  apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: test-kepler-clusterrole
-  apiGroup: "rbac.authorization.k8s.io"
+  name: test-alloy-operator
 subjects:
   - kind: ServiceAccount
-    name: test-kepler
+    name: test-alloy-operator
     namespace: test-namespace
 ---
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/kube-state-metrics/templates/clusterrolebinding.yaml
+# Source: grafana-cloud-onboarding/charts/kube-state-metrics/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -459,46 +330,6 @@ subjects:
 - kind: ServiceAccount
   name: test-kube-state-metrics
   namespace: test-namespace
----
-# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-manager.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: test-alloy-operator-alloy-manager
-  labels:
-    helm.sh/chart: alloy-operator-0.3.11
-    app.kubernetes.io/name: alloy-operator
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.3.0"
-    app.kubernetes.io/managed-by: Helm
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: test-alloy-operator-alloy-manager
-subjects:
-  - kind: ServiceAccount
-    name: test-alloy-operator
-    namespace: test-namespace
----
-# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-objects.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: test-alloy-operator
-  labels:
-    helm.sh/chart: alloy-operator-0.3.11
-    app.kubernetes.io/name: alloy-operator
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.3.0"
-    app.kubernetes.io/managed-by: Helm
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: test-alloy-operator
-subjects:
-  - kind: ServiceAccount
-    name: test-alloy-operator
-    namespace: test-namespace
 ---
 # Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/leader-election.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -566,133 +397,6 @@ subjects:
     name: test-alloy-operator
     namespace: test-namespace
 ---
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/beyla/templates/cache-service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: beyla-k8s-cache
-  namespace: test-namespace
-  labels:
-    helm.sh/chart: beyla-1.10.0
-    app.kubernetes.io/name: beyla-k8s-cache
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.7.5"
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/part-of: beyla
-    app.kubernetes.io/component: networking
-spec:
-  ports:
-    - port: 50055
-      protocol: TCP
-      targetPort: grpc
-      name: grpc
-  selector:
-    app.kubernetes.io/name: beyla-k8s-cache
----
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/kepler/templates/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: test-kepler
-  namespace: test-namespace
-  labels:
-    helm.sh/chart: kepler-0.6.1
-    app.kubernetes.io/name: kepler
-    app.kubernetes.io/component: exporter
-    app.kubernetes.io/version: "release-0.8.0"
-    app.kubernetes.io/managed-by: Helm
-spec:
-  type: ClusterIP
-  ports:
-    - name: http
-      port: 9102
-      targetPort: http
-      protocol: TCP
-  selector:
-    app.kubernetes.io/name: kepler
-    app.kubernetes.io/component: exporter
----
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/kube-state-metrics/templates/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: test-kube-state-metrics
-  namespace: test-namespace
-  labels:    
-    helm.sh/chart: kube-state-metrics-6.4.1
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: kube-state-metrics
-    app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.17.0"
-  annotations:
-    prometheus.io/scrape: 'true'
-spec:
-  type: "ClusterIP"
-  ports:
-  - name: http
-    protocol: TCP
-    port: 8080
-    targetPort: http
-  
-  selector:    
-    app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/instance: test
----
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/prometheus-node-exporter/templates/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: test-prometheus-node-exporter
-  namespace: test-namespace
-  labels:
-    helm.sh/chart: prometheus-node-exporter-4.49.1
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: prometheus-node-exporter
-    app.kubernetes.io/name: prometheus-node-exporter
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.10.2"
-  annotations:
-    prometheus.io/scrape: "true"
-spec:
-  type: ClusterIP
-  ports:
-    - port: 9100
-      targetPort: 9100
-      protocol: TCP
-      name: metrics
-  selector:
-    app.kubernetes.io/name: prometheus-node-exporter
-    app.kubernetes.io/instance: test
----
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/prometheus-windows-exporter/templates/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: test-prometheus-windows-exporter
-  namespace: test-namespace
-  labels:
-    helm.sh/chart: prometheus-windows-exporter-0.12.2
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: prometheus-windows-exporter
-    app.kubernetes.io/name: prometheus-windows-exporter
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "0.31.3"
-spec:
-  type: ClusterIP
-  ports:
-    - port: 9182
-      targetPort: metrics
-      protocol: TCP
-      appProtocol: http
-      name: metrics
-  selector:
-    app.kubernetes.io/name: prometheus-windows-exporter
-    app.kubernetes.io/instance: test
----
 # Source: grafana-cloud-onboarding/charts/alloy-operator/templates/service.yaml
 apiVersion: v1
 kind: Service
@@ -720,136 +424,62 @@ spec:
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
 ---
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/kepler/templates/daemonset.yaml
-apiVersion: apps/v1
-kind: DaemonSet
+# Source: grafana-cloud-onboarding/charts/kube-state-metrics/templates/service.yaml
+apiVersion: v1
+kind: Service
 metadata:
-  name: test-kepler
+  name: test-kube-state-metrics
+  namespace: test-namespace
+  labels:    
+    helm.sh/chart: kube-state-metrics-6.4.1
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: kube-state-metrics
+    app.kubernetes.io/name: kube-state-metrics
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "2.17.0"
+  annotations:
+    prometheus.io/scrape: 'true'
+spec:
+  type: "ClusterIP"
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    targetPort: http
+  
+  selector:    
+    app.kubernetes.io/name: kube-state-metrics
+    app.kubernetes.io/instance: test
+---
+# Source: grafana-cloud-onboarding/charts/prometheus-node-exporter/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-prometheus-node-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: kepler-0.6.1
-    app.kubernetes.io/name: kepler
-    app.kubernetes.io/component: exporter
-    app.kubernetes.io/version: "release-0.8.0"
+    helm.sh/chart: prometheus-node-exporter-4.49.1
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: prometheus-node-exporter
+    app.kubernetes.io/name: prometheus-node-exporter
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "1.10.2"
+  annotations:
+    prometheus.io/scrape: "true"
 spec:
+  type: ClusterIP
+  ports:
+    - port: 9100
+      targetPort: 9100
+      protocol: TCP
+      name: metrics
   selector:
-    matchLabels:
-      app.kubernetes.io/name: kepler
-      app.kubernetes.io/component: exporter
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: kepler
-        app.kubernetes.io/component: exporter
-    spec:
-      hostNetwork: true
-      serviceAccountName: test-kepler
-      containers:
-      - name: kepler-exporter
-        image: "quay.io/sustainable_computing_io/kepler:release-0.8.0"
-        imagePullPolicy: Always
-        securityContext:
-            privileged: true
-        args:
-          - -v=$(KEPLER_LOG_LEVEL)
-        env:
-          - name: NODE_IP
-            valueFrom:
-              fieldRef:
-                fieldPath: status.hostIP
-          - name: NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
-          - name: METRIC_PATH
-            value: "/metrics"
-          - name: BIND_ADDRESS
-            value: "0.0.0.0:9102"
-          - name: "CGROUP_METRICS"
-            value: "*"
-          - name: "CPU_ARCH_OVERRIDE"
-            value: ""
-          - name: "ENABLE_EBPF_CGROUPID"
-            value: "true"
-          - name: "ENABLE_GPU"
-            value: "true"
-          - name: "ENABLE_PROCESS_METRICS"
-            value: "false"
-          - name: "ENABLE_QAT"
-            value: "false"
-          - name: "EXPOSE_CGROUP_METRICS"
-            value: "false"
-          - name: "EXPOSE_HW_COUNTER_METRICS"
-            value: "true"
-          - name: "EXPOSE_IRQ_COUNTER_METRICS"
-            value: "true"
-          - name: "KEPLER_LOG_LEVEL"
-            value: "1"
-        ports:
-        - containerPort: 9102
-          hostPort: 9102
-          name: http
-        livenessProbe:
-          failureThreshold: 5
-          httpGet:
-            path: /healthz
-            port: http
-            scheme: HTTP
-          initialDelaySeconds: 10
-          periodSeconds: 60
-          successThreshold: 1
-          timeoutSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: http
-            scheme: HTTP
-          initialDelaySeconds: 10
-        startupProbe:
-          httpGet:
-            path: /healthz
-            port: http
-            scheme: HTTP
-          initialDelaySeconds: 1
-        volumeMounts:
-          - name: lib-modules
-            mountPath: /lib/modules
-          - name: tracing
-            mountPath: /sys
-          - name: proc
-            mountPath: /proc
-          - name: config-dir
-            mountPath: /etc/kepler
-          - name: usr-src
-            mountPath: /usr/src
-      volumes:
-        - name: lib-modules
-          hostPath:
-            path: /lib/modules
-            type: DirectoryOrCreate
-        - name: tracing
-          hostPath:
-            path: /sys
-            type: Directory
-        - name: proc
-          hostPath:
-            path: /proc
-            type: Directory
-        - name: config-dir
-          emptyDir:
-            sizeLimit: 100Ki
-        - name: usr-src
-          hostPath:
-            path: /usr/src
-            type: Directory
-      nodeSelector:
-        kubernetes.io/os: linux
-      tolerations:
-        - effect: NoSchedule
-          key: node-role.kubernetes.io/control-plane
+    app.kubernetes.io/name: prometheus-node-exporter
+    app.kubernetes.io/instance: test
 ---
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/prometheus-node-exporter/templates/daemonset.yaml
+# Source: grafana-cloud-onboarding/charts/prometheus-node-exporter/templates/daemonset.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -977,154 +607,83 @@ spec:
           hostPath:
             path: /
 ---
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/prometheus-windows-exporter/templates/daemonset.yaml
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: test-prometheus-windows-exporter
-  namespace: test-namespace
-  labels:
-    helm.sh/chart: prometheus-windows-exporter-0.12.2
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: prometheus-windows-exporter
-    app.kubernetes.io/name: prometheus-windows-exporter
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "0.31.3"
-spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: prometheus-windows-exporter
-      app.kubernetes.io/instance: test
-  updateStrategy:
-    rollingUpdate:
-      maxUnavailable: 1
-    type: RollingUpdate
-  template:
-    metadata:
-      annotations:
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
-      labels:
-        helm.sh/chart: prometheus-windows-exporter-0.12.2
-        app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/component: metrics
-        app.kubernetes.io/part-of: prometheus-windows-exporter
-        app.kubernetes.io/name: prometheus-windows-exporter
-        app.kubernetes.io/instance: test
-        app.kubernetes.io/version: "0.31.3"
-    spec:
-      automountServiceAccountToken: false
-      securityContext:
-        windowsOptions:
-          hostProcess: true
-          runAsUserName: NT AUTHORITY\system
-      initContainers:
-        - name: configure-firewall
-          image: ghcr.io/prometheus-community/windows-exporter:0.31.3
-          command: [ "powershell" ]
-          args: [ "New-NetFirewallRule", "-DisplayName", "'windows-exporter'", "-Direction", "inbound", "-Profile", "Any", "-Action", "Allow", "-LocalPort", "9182", "-Protocol", "TCP" ]
-      serviceAccountName: test-prometheus-windows-exporter
-      containers:
-        - name: windows-exporter
-          image: ghcr.io/prometheus-community/windows-exporter:0.31.3
-          imagePullPolicy: IfNotPresent
-          args:
-            - --config.file=%CONTAINER_SANDBOX_MOUNT_POINT%/config.yml
-            - --collector.textfile.directories=%CONTAINER_SANDBOX_MOUNT_POINT%
-            - --web.listen-address=:9182
-          env:
-          ports:
-            - name: metrics
-              containerPort: 9182
-              protocol: TCP
-          livenessProbe:
-            failureThreshold: 3
-            httpGet:
-              httpHeaders:
-              path: /health
-              port: 9182
-              scheme: HTTP
-            initialDelaySeconds: 0
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
-          readinessProbe:
-            failureThreshold: 3
-            httpGet:
-              httpHeaders:
-              path: /health
-              port: 9182
-              scheme: HTTP
-            initialDelaySeconds: 0
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
-          volumeMounts:
-            - name: config
-              mountPath: /config.yml
-              subPath: config.yml
-      hostNetwork: true
-      hostPID: true
-      nodeSelector:
-        kubernetes.io/os: windows
-      tolerations:
-        - effect: NoSchedule
-          operator: Exists
-      volumes:
-        - name: config
-          configMap:
-            name: test-prometheus-windows-exporter
----
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/beyla/templates/cache-deployment.yaml
+# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: beyla-k8s-cache
+  name: test-alloy-operator
   namespace: test-namespace
   labels:
-    helm.sh/chart: beyla-1.10.0
-    app.kubernetes.io/name: beyla-k8s-cache
+    helm.sh/chart: alloy-operator-0.3.11
+    app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/version: "1.3.0"
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/part-of: beyla
-    app.kubernetes.io/component: workload
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: beyla-k8s-cache
+      app.kubernetes.io/name: alloy-operator
+      app.kubernetes.io/instance: test
   template:
     metadata:
       labels:
-        helm.sh/chart: beyla-1.10.0
-        app.kubernetes.io/name: beyla-k8s-cache
+        helm.sh/chart: alloy-operator-0.3.11
+        app.kubernetes.io/name: alloy-operator
         app.kubernetes.io/instance: test
-        app.kubernetes.io/version: "2.7.5"
+        app.kubernetes.io/version: "1.3.0"
         app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/part-of: beyla
     spec:
-      serviceAccountName: test-beyla
+      serviceAccountName: test-alloy-operator
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
-        - name: beyla-cache
-          image: docker.io/grafana/beyla-k8s-cache:2
+        - name: alloy-operator
+          image: "ghcr.io/grafana/alloy-operator:1.3.0"
           imagePullPolicy: IfNotPresent
+          args:
+            - --health-probe-bind-address=:8081
+            - --metrics-bind-address=:8082
+            - --leader-elect
+            - --leader-election-id=test-alloy-operator
+
           ports:
-            - containerPort: 50055
+            - name: http
+              containerPort: 8081
               protocol: TCP
-              name: grpc
+            - name: metrics
+              containerPort: 8082
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
           resources:
-            limits:
-              cpu: "3.0"
-              memory: 2Gi
-            requests:
-              cpu: "0.1"
-              memory: 256Mi
-          env:
-            - name: BEYLA_K8S_CACHE_PORT
-              value: "50055"
+            limits: {}
+            requests: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+      nodeSelector:
+        kubernetes.io/os: linux
 ---
-# Source: grafana-cloud-onboarding/charts/additional-components/charts/kube-state-metrics/templates/deployment.yaml
+# Source: grafana-cloud-onboarding/charts/kube-state-metrics/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1210,82 +769,6 @@ spec:
             - ALL
           readOnlyRootFilesystem: true
 ---
-# Source: grafana-cloud-onboarding/charts/alloy-operator/templates/deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: test-alloy-operator
-  namespace: test-namespace
-  labels:
-    helm.sh/chart: alloy-operator-0.3.11
-    app.kubernetes.io/name: alloy-operator
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.3.0"
-    app.kubernetes.io/managed-by: Helm
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: alloy-operator
-      app.kubernetes.io/instance: test
-  template:
-    metadata:
-      labels:
-        helm.sh/chart: alloy-operator-0.3.11
-        app.kubernetes.io/name: alloy-operator
-        app.kubernetes.io/instance: test
-        app.kubernetes.io/version: "1.3.0"
-        app.kubernetes.io/managed-by: Helm
-    spec:
-      serviceAccountName: test-alloy-operator
-      securityContext:
-        fsGroup: 1000
-        runAsGroup: 1000
-        runAsNonRoot: true
-        runAsUser: 1000
-        seccompProfile:
-          type: RuntimeDefault
-      containers:
-        - name: alloy-operator
-          image: "ghcr.io/grafana/alloy-operator:1.3.0"
-          imagePullPolicy: IfNotPresent
-          args:
-            - --health-probe-bind-address=:8081
-            - --metrics-bind-address=:8082
-            - --leader-elect
-            - --leader-election-id=test-alloy-operator
-
-          ports:
-            - name: http
-              containerPort: 8081
-              protocol: TCP
-            - name: metrics
-              containerPort: 8082
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 8081
-            initialDelaySeconds: 15
-            periodSeconds: 20
-          readinessProbe:
-            httpGet:
-              path: /readyz
-              port: 8081
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          resources:
-            limits: {}
-            requests: {}
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-              - ALL
-            readOnlyRootFilesystem: true
-      nodeSelector:
-        kubernetes.io/os: linux
----
 # Source: grafana-cloud-onboarding/templates/alloy.yaml
 apiVersion: collectors.grafana.com/v1alpha1
 kind: Alloy
@@ -1317,7 +800,7 @@ spec:
             "platform" = "kubernetes",
             "release" = "test",
             "source" = "grafana-cloud-onboarding",
-            "sourceVersion" = "0.3.1",
+            "sourceVersion" = "0.4.0",
             "workloadName" = "alloy-daemon",
             "workloadType" = "daemonset",
           }
@@ -1607,7 +1090,7 @@ metadata:
   labels:
     app.kubernetes.io/name: test-grafana-cloud-onboarding-add-finalizer
     app.kubernetes.io/instance: test
-    helm.sh/chart: grafana-cloud-onboarding-0.3.1
+    helm.sh/chart: grafana-cloud-onboarding-0.4.0
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "15"
@@ -1659,7 +1142,7 @@ metadata:
   labels:
     app.kubernetes.io/name: test-grafana-cloud-onboarding-remove-alloy-and-finalizer
     app.kubernetes.io/instance: test
-    helm.sh/chart: grafana-cloud-onboarding-0.3.1
+    helm.sh/chart: grafana-cloud-onboarding-0.4.0
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded

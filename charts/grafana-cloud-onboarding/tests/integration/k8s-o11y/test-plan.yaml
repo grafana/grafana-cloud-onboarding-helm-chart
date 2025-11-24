@@ -9,6 +9,7 @@ subject:
 
 cluster:
   type: kind
+  appendRandomNumber: true
 
 dependencies:
   - file: ../grafana-cloud-credentials.yaml

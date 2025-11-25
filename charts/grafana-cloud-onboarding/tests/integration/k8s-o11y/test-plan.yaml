@@ -18,6 +18,8 @@ dependencies:
   - file: ../grafana-cloud-credentials.yaml
   - file: ../grafana-cloud-credentials.yaml
     namespace: toolbox
+  - preset: test-parameters
+    namespace: toolbox
 
 tests:
   - type: query-test
@@ -36,5 +38,5 @@ tests:
               type: promql
 
             # kube-state-metrics
-            - query: kube_node_info{cluster="$CLUSTER_NAME"}
+            - query: kube_node_info{cluster="$clusterName"}
               type: promql

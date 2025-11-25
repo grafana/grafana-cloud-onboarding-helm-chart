@@ -1,7 +1,7 @@
 ---
 apiVersion: helm-chart-toolbox.grafana.com/v1
 kind: TestPlan
-name: k8s-o11y
+name: beyla-k8s-cache
 
 subject:
   path: ../../..
@@ -29,14 +29,19 @@ tests:
             - secretRef: {name: grafana-cloud}
             - configMapRef: {name: test-parameters}
           env:
+            CLUSTER: beyla-k8s-cache
             PROMETHEUS_URL: https://prometheus-prod-13-prod-us-east-0.grafana.net/api/prom/api/v1/query
           queries:
             # Beyla Surveyor
-            - query: survey_info{k8s_cluster_name="$clusterName", k8s_deployment_name="k8s-o11y-kube-state-metrics"}
+            - query: survey_info{k8s_cluster_name="$clusterName", k8s_deployment_name="beyla-k8s-cache-kube-state-metrics"}
               type: promql
-            - query: survey_info{k8s_cluster_name="$clusterName", k8s_daemonset_name="k8s-o11y-prometheus-node-exporter"}
+            - query: survey_info{k8s_cluster_name="$clusterName", k8s_daemonset_name="beyla-k8s-cache-prometheus-node-exporter"}
               type: promql
 
             # kube-state-metrics
             - query: kube_node_info{cluster="$clusterName"}
               type: promql
+  - type: kubernetes-objects-test
+    values:
+      checks:
+        - {name: beyla-k8s-cache, kind: Deployment, namespace: default, expect: {count: 1}}

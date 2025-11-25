@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.0
+
+*   Removed the "additionalComponents" chart in favor on a single chart (@petewall)
+*   Added beyla-k8s-cache as additional component (@skl)
+
 ## 0.3.1
 
 *   Change Fleet Management polling interval to 30s (@petewall)

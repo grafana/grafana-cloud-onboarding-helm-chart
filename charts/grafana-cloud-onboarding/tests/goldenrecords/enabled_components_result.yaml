@@ -29,6 +29,19 @@ metadata:
     app.kubernetes.io/component: rbac
 automountServiceAccountToken: true
 ---
+# Source: grafana-cloud-onboarding/charts/kepler/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: test-kepler
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: kepler-0.6.1
+    app.kubernetes.io/name: kepler
+    app.kubernetes.io/component: exporter
+    app.kubernetes.io/version: "release-0.8.0"
+    app.kubernetes.io/managed-by: Helm
+---
 # Source: grafana-cloud-onboarding/charts/kube-state-metrics/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -60,6 +73,21 @@ metadata:
     app.kubernetes.io/instance: test
     app.kubernetes.io/version: "1.10.2"
 automountServiceAccountToken: false
+---
+# Source: grafana-cloud-onboarding/charts/prometheus-windows-exporter/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: test-prometheus-windows-exporter
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: prometheus-windows-exporter-0.12.2
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: prometheus-windows-exporter
+    app.kubernetes.io/name: prometheus-windows-exporter
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "0.31.3"
 ---
 # Source: grafana-cloud-onboarding/templates/fleet_management_secret.yaml
 apiVersion: v1
@@ -103,6 +131,25 @@ data:
     prometheus_export:
       path: /metrics
       port: 9090
+---
+# Source: grafana-cloud-onboarding/charts/prometheus-windows-exporter/templates/config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-prometheus-windows-exporter
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: prometheus-windows-exporter-0.12.2
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: prometheus-windows-exporter
+    app.kubernetes.io/name: prometheus-windows-exporter
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "0.31.3"
+data:
+  config.yml: |
+    collectors:
+      enabled: '[defaults],memory,container'
 ---
 # Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-manager.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -182,6 +229,23 @@ rules:
   - apiGroups: [ "" ]
     resources: [ "pods", "services", "nodes" ]
     verbs: [ "list", "watch", "get" ]
+---
+# Source: grafana-cloud-onboarding/charts/kepler/templates/rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: test-kepler-clusterrole
+rules:
+  - apiGroups: [""]
+    resources:
+      - nodes/metrics # access /metrics/resource
+      - nodes/proxy
+      - nodes/stats
+      - pods
+    verbs:
+      - get
+      - watch
+      - list
 ---
 # Source: grafana-cloud-onboarding/charts/kube-state-metrics/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -400,6 +464,20 @@ roleRef:
   kind: ClusterRole
   name: test-beyla
 ---
+# Source: grafana-cloud-onboarding/charts/kepler/templates/rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: test-kepler-clusterrole-binding
+roleRef:
+  kind: ClusterRole
+  name: test-kepler-clusterrole
+  apiGroup: "rbac.authorization.k8s.io"
+subjects:
+  - kind: ServiceAccount
+    name: test-kepler
+    namespace: test-namespace
+---
 # Source: grafana-cloud-onboarding/charts/kube-state-metrics/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -538,6 +616,29 @@ spec:
   selector:
     app.kubernetes.io/name: beyla-k8s-cache
 ---
+# Source: grafana-cloud-onboarding/charts/kepler/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-kepler
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: kepler-0.6.1
+    app.kubernetes.io/name: kepler
+    app.kubernetes.io/component: exporter
+    app.kubernetes.io/version: "release-0.8.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 9102
+      targetPort: http
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: kepler
+    app.kubernetes.io/component: exporter
+---
 # Source: grafana-cloud-onboarding/charts/kube-state-metrics/templates/service.yaml
 apiVersion: v1
 kind: Service
@@ -592,6 +693,227 @@ spec:
   selector:
     app.kubernetes.io/name: prometheus-node-exporter
     app.kubernetes.io/instance: test
+---
+# Source: grafana-cloud-onboarding/charts/prometheus-windows-exporter/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-prometheus-windows-exporter
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: prometheus-windows-exporter-0.12.2
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: prometheus-windows-exporter
+    app.kubernetes.io/name: prometheus-windows-exporter
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "0.31.3"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9182
+      targetPort: metrics
+      protocol: TCP
+      appProtocol: http
+      name: metrics
+  selector:
+    app.kubernetes.io/name: prometheus-windows-exporter
+    app.kubernetes.io/instance: test
+---
+# Source: grafana-cloud-onboarding/charts/beyla/templates/daemon-set.yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: test-beyla
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: beyla-1.10.0
+    app.kubernetes.io/name: beyla
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: beyla
+    app.kubernetes.io/component: workload
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: beyla
+      app.kubernetes.io/instance: test
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        checksum/config: cc8d2fae94d56f52e93e2df244f74145c92867cc18ba0919f560c4a0090dca99
+      labels:
+        helm.sh/chart: beyla-1.10.0
+        app.kubernetes.io/name: beyla
+        app.kubernetes.io/instance: test
+        app.kubernetes.io/version: "2.7.5"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/part-of: beyla
+        app.kubernetes.io/component: workload
+    spec:
+      serviceAccountName: test-beyla
+      hostPID: true
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: beyla
+          image: docker.io/grafana/beyla:2.7.5
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+          ports:
+          - name: metrics
+            containerPort: 9090
+            protocol: TCP
+          env:
+            - name: BEYLA_CONFIG_PATH
+              value: "/etc/beyla/config/beyla-config.yml"
+            - name: BEYLA_KUBE_META_CACHE_ADDRESS
+              value: beyla-k8s-cache:50055
+          volumeMounts:
+            - mountPath: /etc/beyla/config
+              name: beyla-config
+            - mountPath: /sys/fs/cgroup
+              name: cgroup
+      volumes:
+        - name: beyla-config
+          configMap:
+            name: test-beyla
+        - name: cgroup
+          hostPath:
+            path: /sys/fs/cgroup
+---
+# Source: grafana-cloud-onboarding/charts/kepler/templates/daemonset.yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: test-kepler
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: kepler-0.6.1
+    app.kubernetes.io/name: kepler
+    app.kubernetes.io/component: exporter
+    app.kubernetes.io/version: "release-0.8.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kepler
+      app.kubernetes.io/component: exporter
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kepler
+        app.kubernetes.io/component: exporter
+    spec:
+      hostNetwork: true
+      serviceAccountName: test-kepler
+      containers:
+      - name: kepler-exporter
+        image: "quay.io/sustainable_computing_io/kepler:release-0.8.0"
+        imagePullPolicy: Always
+        securityContext:
+            privileged: true
+        args:
+          - -v=$(KEPLER_LOG_LEVEL)
+        env:
+          - name: NODE_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: METRIC_PATH
+            value: "/metrics"
+          - name: BIND_ADDRESS
+            value: "0.0.0.0:9102"
+          - name: "CGROUP_METRICS"
+            value: "*"
+          - name: "CPU_ARCH_OVERRIDE"
+            value: ""
+          - name: "ENABLE_EBPF_CGROUPID"
+            value: "true"
+          - name: "ENABLE_GPU"
+            value: "true"
+          - name: "ENABLE_PROCESS_METRICS"
+            value: "false"
+          - name: "ENABLE_QAT"
+            value: "false"
+          - name: "EXPOSE_CGROUP_METRICS"
+            value: "false"
+          - name: "EXPOSE_HW_COUNTER_METRICS"
+            value: "true"
+          - name: "EXPOSE_IRQ_COUNTER_METRICS"
+            value: "true"
+          - name: "KEPLER_LOG_LEVEL"
+            value: "1"
+        ports:
+        - containerPort: 9102
+          hostPort: 9102
+          name: http
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /healthz
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 10
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 1
+        volumeMounts:
+          - name: lib-modules
+            mountPath: /lib/modules
+          - name: tracing
+            mountPath: /sys
+          - name: proc
+            mountPath: /proc
+          - name: config-dir
+            mountPath: /etc/kepler
+          - name: usr-src
+            mountPath: /usr/src
+      volumes:
+        - name: lib-modules
+          hostPath:
+            path: /lib/modules
+            type: DirectoryOrCreate
+        - name: tracing
+          hostPath:
+            path: /sys
+            type: Directory
+        - name: proc
+          hostPath:
+            path: /proc
+            type: Directory
+        - name: config-dir
+          emptyDir:
+            sizeLimit: 100Ki
+        - name: usr-src
+          hostPath:
+            path: /usr/src
+            type: Directory
+      nodeSelector:
+        kubernetes.io/os: linux
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
 ---
 # Source: grafana-cloud-onboarding/charts/prometheus-node-exporter/templates/daemonset.yaml
 apiVersion: apps/v1
@@ -720,6 +1042,104 @@ spec:
         - name: root
           hostPath:
             path: /
+---
+# Source: grafana-cloud-onboarding/charts/prometheus-windows-exporter/templates/daemonset.yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: test-prometheus-windows-exporter
+  namespace: test-namespace
+  labels:
+    helm.sh/chart: prometheus-windows-exporter-0.12.2
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: prometheus-windows-exporter
+    app.kubernetes.io/name: prometheus-windows-exporter
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "0.31.3"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus-windows-exporter
+      app.kubernetes.io/instance: test
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+      labels:
+        helm.sh/chart: prometheus-windows-exporter-0.12.2
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: metrics
+        app.kubernetes.io/part-of: prometheus-windows-exporter
+        app.kubernetes.io/name: prometheus-windows-exporter
+        app.kubernetes.io/instance: test
+        app.kubernetes.io/version: "0.31.3"
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        windowsOptions:
+          hostProcess: true
+          runAsUserName: NT AUTHORITY\system
+      initContainers:
+        - name: configure-firewall
+          image: ghcr.io/prometheus-community/windows-exporter:0.31.3
+          command: [ "powershell" ]
+          args: [ "New-NetFirewallRule", "-DisplayName", "'windows-exporter'", "-Direction", "inbound", "-Profile", "Any", "-Action", "Allow", "-LocalPort", "9182", "-Protocol", "TCP" ]
+      serviceAccountName: test-prometheus-windows-exporter
+      containers:
+        - name: windows-exporter
+          image: ghcr.io/prometheus-community/windows-exporter:0.31.3
+          imagePullPolicy: IfNotPresent
+          args:
+            - --config.file=%CONTAINER_SANDBOX_MOUNT_POINT%/config.yml
+            - --collector.textfile.directories=%CONTAINER_SANDBOX_MOUNT_POINT%
+            - --web.listen-address=:9182
+          env:
+          ports:
+            - name: metrics
+              containerPort: 9182
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              httpHeaders:
+              path: /health
+              port: 9182
+              scheme: HTTP
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              httpHeaders:
+              path: /health
+              port: 9182
+              scheme: HTTP
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          volumeMounts:
+            - name: config
+              mountPath: /config.yml
+              subPath: config.yml
+      hostNetwork: true
+      hostPID: true
+      nodeSelector:
+        kubernetes.io/os: windows
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+      volumes:
+        - name: config
+          configMap:
+            name: test-prometheus-windows-exporter
 ---
 # Source: grafana-cloud-onboarding/charts/alloy-operator/templates/deployment.yaml
 apiVersion: apps/v1
@@ -970,10 +1390,10 @@ spec:
           }
         }
         logging {
-          level = "debug"
+          level = "info"
         }
         livedebugging {
-          enabled = false
+          enabled = true
         }
       create: true
       key: null
@@ -1008,7 +1428,7 @@ spec:
     listenScheme: HTTP
     livenessProbe: {}
     mounts:
-      dockercontainers: true
+      dockercontainers: false
       extra:
       - mountPath: /var/lib/alloy
         name: alloy-storage
@@ -1017,7 +1437,7 @@ spec:
     resources: {}
     securityContext:
       privileged: true
-    stabilityLevel: experimental
+    stabilityLevel: public-preview
     storagePath: /var/lib/alloy
     uiPathPrefix: /
   configReloader:

@@ -29,38 +29,6 @@ metadata:
     app.kubernetes.io/component: rbac
 automountServiceAccountToken: true
 ---
-# Source: grafana-cloud-onboarding/charts/kube-state-metrics/templates/serviceaccount.yaml
-apiVersion: v1
-kind: ServiceAccount
-automountServiceAccountToken: true
-metadata:
-  labels:    
-    helm.sh/chart: kube-state-metrics-6.4.1
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: kube-state-metrics
-    app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.17.0"
-  name: test-kube-state-metrics
-  namespace: test-namespace
----
-# Source: grafana-cloud-onboarding/charts/prometheus-node-exporter/templates/serviceaccount.yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: test-prometheus-node-exporter
-  namespace: test-namespace
-  labels:
-    helm.sh/chart: prometheus-node-exporter-4.49.1
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: prometheus-node-exporter
-    app.kubernetes.io/name: prometheus-node-exporter
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.10.2"
-automountServiceAccountToken: false
----
 # Source: grafana-cloud-onboarding/templates/fleet_management_secret.yaml
 apiVersion: v1
 kind: Secret
@@ -183,161 +151,6 @@ rules:
     resources: [ "pods", "services", "nodes" ]
     verbs: [ "list", "watch", "get" ]
 ---
-# Source: grafana-cloud-onboarding/charts/kube-state-metrics/templates/role.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  labels:    
-    helm.sh/chart: kube-state-metrics-6.4.1
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: kube-state-metrics
-    app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.17.0"
-  name: test-kube-state-metrics
-rules:
-
-- apiGroups: ["certificates.k8s.io"]
-  resources:
-  - certificatesigningrequests
-  verbs: ["list", "watch"]
-
-- apiGroups: [""]
-  resources:
-  - configmaps
-  verbs: ["list", "watch"]
-
-- apiGroups: ["batch"]
-  resources:
-  - cronjobs
-  verbs: ["list", "watch"]
-
-- apiGroups: ["apps"]
-  resources:
-  - daemonsets
-  verbs: ["list", "watch"]
-
-- apiGroups: ["apps"]
-  resources:
-  - deployments
-  verbs: ["list", "watch"]
-
-- apiGroups: [""]
-  resources:
-  - endpoints
-  verbs: ["list", "watch"]
-
-- apiGroups: ["autoscaling"]
-  resources:
-  - horizontalpodautoscalers
-  verbs: ["list", "watch"]
-
-- apiGroups: ["networking.k8s.io"]
-  resources:
-  - ingresses
-  verbs: ["list", "watch"]
-
-- apiGroups: ["batch"]
-  resources:
-  - jobs
-  verbs: ["list", "watch"]
-
-- apiGroups: ["coordination.k8s.io"]
-  resources:
-  - leases
-  verbs: ["list", "watch"]
-
-- apiGroups: [""]
-  resources:
-  - limitranges
-  verbs: ["list", "watch"]
-
-- apiGroups: ["admissionregistration.k8s.io"]
-  resources:
-    - mutatingwebhookconfigurations
-  verbs: ["list", "watch"]
-
-- apiGroups: [""]
-  resources:
-  - namespaces
-  verbs: ["list", "watch"]
-
-- apiGroups: ["networking.k8s.io"]
-  resources:
-  - networkpolicies
-  verbs: ["list", "watch"]
-
-- apiGroups: [""]
-  resources:
-  - nodes
-  verbs: ["list", "watch"]
-
-- apiGroups: [""]
-  resources:
-  - persistentvolumeclaims
-  verbs: ["list", "watch"]
-
-- apiGroups: [""]
-  resources:
-  - persistentvolumes
-  verbs: ["list", "watch"]
-
-- apiGroups: ["policy"]
-  resources:
-    - poddisruptionbudgets
-  verbs: ["list", "watch"]
-
-- apiGroups: [""]
-  resources:
-  - pods
-  verbs: ["list", "watch"]
-
-- apiGroups: ["apps"]
-  resources:
-  - replicasets
-  verbs: ["list", "watch"]
-
-- apiGroups: [""]
-  resources:
-  - replicationcontrollers
-  verbs: ["list", "watch"]
-
-- apiGroups: [""]
-  resources:
-  - resourcequotas
-  verbs: ["list", "watch"]
-
-- apiGroups: [""]
-  resources:
-  - secrets
-  verbs: ["list", "watch"]
-
-- apiGroups: [""]
-  resources:
-  - services
-  verbs: ["list", "watch"]
-
-- apiGroups: ["apps"]
-  resources:
-  - statefulsets
-  verbs: ["list", "watch"]
-
-- apiGroups: ["storage.k8s.io"]
-  resources:
-    - storageclasses
-  verbs: ["list", "watch"]
-
-- apiGroups: ["admissionregistration.k8s.io"]
-  resources:
-    - validatingwebhookconfigurations
-  verbs: ["list", "watch"]
-
-- apiGroups: ["storage.k8s.io"]
-  resources:
-    - volumeattachments
-  verbs: ["list", "watch"]
----
 # Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/alloy-manager.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -399,28 +212,6 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: test-beyla
----
-# Source: grafana-cloud-onboarding/charts/kube-state-metrics/templates/clusterrolebinding.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  labels:    
-    helm.sh/chart: kube-state-metrics-6.4.1
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: kube-state-metrics
-    app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.17.0"
-  name: test-kube-state-metrics
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: test-kube-state-metrics
-subjects:
-- kind: ServiceAccount
-  name: test-kube-state-metrics
-  namespace: test-namespace
 ---
 # Source: grafana-cloud-onboarding/charts/alloy-operator/templates/rbac/leader-election.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -537,189 +328,6 @@ spec:
       name: grpc
   selector:
     app.kubernetes.io/name: beyla-k8s-cache
----
-# Source: grafana-cloud-onboarding/charts/kube-state-metrics/templates/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: test-kube-state-metrics
-  namespace: test-namespace
-  labels:    
-    helm.sh/chart: kube-state-metrics-6.4.1
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: kube-state-metrics
-    app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.17.0"
-  annotations:
-    prometheus.io/scrape: 'true'
-spec:
-  type: "ClusterIP"
-  ports:
-  - name: http
-    protocol: TCP
-    port: 8080
-    targetPort: http
-  
-  selector:    
-    app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/instance: test
----
-# Source: grafana-cloud-onboarding/charts/prometheus-node-exporter/templates/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: test-prometheus-node-exporter
-  namespace: test-namespace
-  labels:
-    helm.sh/chart: prometheus-node-exporter-4.49.1
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: prometheus-node-exporter
-    app.kubernetes.io/name: prometheus-node-exporter
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.10.2"
-  annotations:
-    prometheus.io/scrape: "true"
-spec:
-  type: ClusterIP
-  ports:
-    - port: 9100
-      targetPort: 9100
-      protocol: TCP
-      name: metrics
-  selector:
-    app.kubernetes.io/name: prometheus-node-exporter
-    app.kubernetes.io/instance: test
----
-# Source: grafana-cloud-onboarding/charts/prometheus-node-exporter/templates/daemonset.yaml
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: test-prometheus-node-exporter
-  namespace: test-namespace
-  labels:
-    helm.sh/chart: prometheus-node-exporter-4.49.1
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: prometheus-node-exporter
-    app.kubernetes.io/name: prometheus-node-exporter
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.10.2"
-spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: prometheus-node-exporter
-      app.kubernetes.io/instance: test
-  revisionHistoryLimit: 10
-  updateStrategy:
-    rollingUpdate:
-      maxUnavailable: 1
-    type: RollingUpdate
-  template:
-    metadata:
-      annotations:
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
-      labels:
-        helm.sh/chart: prometheus-node-exporter-4.49.1
-        app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/component: metrics
-        app.kubernetes.io/part-of: prometheus-node-exporter
-        app.kubernetes.io/name: prometheus-node-exporter
-        app.kubernetes.io/instance: test
-        app.kubernetes.io/version: "1.10.2"
-    spec:
-      automountServiceAccountToken: false
-      securityContext:
-        fsGroup: 65534
-        runAsGroup: 65534
-        runAsNonRoot: true
-        runAsUser: 65534
-      serviceAccountName: test-prometheus-node-exporter
-      containers:
-        - name: node-exporter
-          image: quay.io/prometheus/node-exporter:v1.10.2
-          imagePullPolicy: IfNotPresent
-          args:
-            - --path.procfs=/host/proc
-            - --path.sysfs=/host/sys
-            - --path.rootfs=/host/root
-            - --path.udev.data=/host/root/run/udev/data
-            - --web.listen-address=[$(HOST_IP)]:9100
-          securityContext:
-            readOnlyRootFilesystem: true
-          env:
-            - name: HOST_IP
-              value: 0.0.0.0
-          ports:
-            - name: metrics
-              containerPort: 9100
-              protocol: TCP
-          livenessProbe:
-            failureThreshold: 3
-            httpGet:
-              httpHeaders:
-              path: /
-              port: metrics
-              scheme: HTTP
-            initialDelaySeconds: 0
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
-          readinessProbe:
-            failureThreshold: 3
-            httpGet:
-              httpHeaders:
-              path: /
-              port: metrics
-              scheme: HTTP
-            initialDelaySeconds: 0
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
-          volumeMounts:
-            - name: proc
-              mountPath: /host/proc
-              readOnly:  true
-            - name: sys
-              mountPath: /host/sys
-              readOnly: true
-            - name: root
-              mountPath: /host/root
-              mountPropagation: HostToContainer
-              readOnly: true
-      hostNetwork: true
-      hostPID: true
-      hostIPC: false
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: eks.amazonaws.com/compute-type
-                operator: NotIn
-                values:
-                - fargate
-              - key: type
-                operator: NotIn
-                values:
-                - virtual-kubelet
-      nodeSelector:
-        kubernetes.io/os: linux
-      tolerations:
-        - effect: NoSchedule
-          operator: Exists
-      volumes:
-        - name: proc
-          hostPath:
-            path: /proc
-        - name: sys
-          hostPath:
-            path: /sys
-        - name: root
-          hostPath:
-            path: /
 ---
 # Source: grafana-cloud-onboarding/charts/alloy-operator/templates/deployment.yaml
 apiVersion: apps/v1
@@ -846,92 +454,6 @@ spec:
             - name: BEYLA_K8S_CACHE_PORT
               value: "50055"
 ---
-# Source: grafana-cloud-onboarding/charts/kube-state-metrics/templates/deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: test-kube-state-metrics
-  namespace: test-namespace
-  labels:    
-    helm.sh/chart: kube-state-metrics-6.4.1
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/part-of: kube-state-metrics
-    app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.17.0"
-spec:
-  selector:
-    matchLabels:      
-      app.kubernetes.io/name: kube-state-metrics
-      app.kubernetes.io/instance: test
-  replicas: 1
-  strategy:
-    type: RollingUpdate
-  revisionHistoryLimit: 10
-  template:
-    metadata:
-      labels:        
-        helm.sh/chart: kube-state-metrics-6.4.1
-        app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/component: metrics
-        app.kubernetes.io/part-of: kube-state-metrics
-        app.kubernetes.io/name: kube-state-metrics
-        app.kubernetes.io/instance: test
-        app.kubernetes.io/version: "2.17.0"
-    spec:
-      automountServiceAccountToken: true
-      hostNetwork: false
-      serviceAccountName: test-kube-state-metrics
-      securityContext:
-        fsGroup: 65534
-        runAsGroup: 65534
-        runAsNonRoot: true
-        runAsUser: 65534
-        seccompProfile:
-          type: RuntimeDefault
-      dnsPolicy: ClusterFirst
-      containers:
-      - name: kube-state-metrics
-        args:
-        - --port=8080
-        - --resources=certificatesigningrequests,configmaps,cronjobs,daemonsets,deployments,endpoints,horizontalpodautoscalers,ingresses,jobs,leases,limitranges,mutatingwebhookconfigurations,namespaces,networkpolicies,nodes,persistentvolumeclaims,persistentvolumes,poddisruptionbudgets,pods,replicasets,replicationcontrollers,resourcequotas,secrets,services,statefulsets,storageclasses,validatingwebhookconfigurations,volumeattachments
-        imagePullPolicy: IfNotPresent
-        image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
-        ports:
-        - containerPort: 8080
-          name: http
-        livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            httpHeaders:
-            path: /livez
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 5
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            httpHeaders:
-            path: /readyz
-            port: 8081
-            scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 5
-        resources:
-          {}
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-          readOnlyRootFilesystem: true
----
 # Source: grafana-cloud-onboarding/templates/alloy.yaml
 apiVersion: collectors.grafana.com/v1alpha1
 kind: Alloy
@@ -970,10 +492,10 @@ spec:
           }
         }
         logging {
-          level = "debug"
+          level = "info"
         }
         livedebugging {
-          enabled = false
+          enabled = true
         }
       create: true
       key: null
@@ -1008,7 +530,7 @@ spec:
     listenScheme: HTTP
     livenessProbe: {}
     mounts:
-      dockercontainers: true
+      dockercontainers: false
       extra:
       - mountPath: /var/lib/alloy
         name: alloy-storage
@@ -1017,7 +539,7 @@ spec:
     resources: {}
     securityContext:
       privileged: true
-    stabilityLevel: experimental
+    stabilityLevel: public-preview
     storagePath: /var/lib/alloy
     uiPathPrefix: /
   configReloader:

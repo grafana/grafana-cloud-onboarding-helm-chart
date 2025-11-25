@@ -27,6 +27,7 @@ tests:
         - {name: grafana-cloud-alloy-daemon, kind: Service, namespace: default, expect: {count: 0}}
         - {name: grafana-cloud-alloy-operator, kind: Deployment, namespace: default, expect: {count: 0}}
         - {name: grafana-cloud-alloy-operator, kind: Service, namespace: default, expect: {count: 0}}
+        - {name: beyla-k8s-cache, kind: Deployment, namespace: default, expect: {count: 0}}
         - {name: grafana-cloud-kepler, kind: DaemonSet, namespace: default, expect: {count: 0}}
         - {name: grafana-cloud-kepler, kind: Service, namespace: default, expect: {count: 0}}
         - {name: grafana-cloud-kube-state-metrics, kind: Deployment, namespace: default, expect: {count: 0}}

@@ -1,3 +1,5 @@
+global: {}
+
 cluster:
   # Required. This is used to identify the cluster in Grafana Cloud.
   # You can use helm install --set cluster.name=$(kubectl config current-context) to set the name matching your kubeconfig.
@@ -53,32 +55,6 @@ collectors:
               path: /var/lib/alloy
               type: DirectoryOrCreate
 
-# Extra components to deploy to the cluster to provide additional metric sources.
-additionalComponents:
-  # kube-state-metrics can be used to get metrics about the state of the kubernetes cluster health and performance.
-  # Installed by default, so you can dynamically enable or disable it through Fleet Management remote configuration.
-  kube-state-metrics:
-    enabled: true
-
-  # node-exporter is used to collect metrics about the health and performance of Linux nodes in the cluster.
-  # Installed by default, so you can dynamically enable or disable it through Fleet Management remote configuration.
-  node-exporter:
-    enabled: true
-
-  # windows-exporter is used to collect metrics about the health and performance of Windows nodes in the cluster.
-  # Installed by default, so you can dynamically enable or disable it through Fleet Management remote configuration.
-  windows-exporter:
-    enabled: true
-
-  # kepler is used to collect metrics about power usage of Kubernetes cluster resources.
-  # Installed by default, so you can dynamically enable or disable it through Fleet Management remote configuration.
-  kepler:
-    enabled: true
-
-# TODO: add it in when ready to use
-# cloud-cost-exporter:
-#    enabled: true
-
 # The Alloy Operator is a Kubernetes Operator that manages Alloy instances and their lifecycle.
 # To see all valid settings, please see the [Alloy Operator documentation](https://github.com/grafana/alloy-operator/tree/main/charts/alloy-operator).
 alloy-operator:
@@ -123,6 +99,61 @@ alloy-operator:
     nodeSelector:
       kubernetes.io/os: linux
 
-global: {}
+# Extra components to deploy to the cluster to provide additional metric sources.
+# Beyla provides service discovery and auto-instrumentation.
+beyla:
+  # Whether to deploy the Beyla standalone DaemonSet. As we're using the Beyla
+  # embedded into Alloy (via the beyla.ebpf component), we set this to false.
+  # @section Beyla
+  enabled: false
+
+  k8sCache:
+    # The number of beyla-k8s-cache replicas, set to 0 to disable. Beyla's K8s
+    # Cache deployment reduces load on the Kubernetes API server.
+    # @section Beyla
+    replicas: 1
+
+    resources:
+      requests:
+        cpu: "0.1"
+        memory: "256Mi"
+
+      # Generous limits to allow for startup spike.
+      limits:
+        cpu: "3.0"
+        memory: "2Gi"
+
+    image:
+      # Match major version of Beyla embedded into Alloy.
+      tag: "2"
+
+# kube-state-metrics can be used to get metrics about the state of the kubernetes cluster health and performance.
+# Installed by default, so you can dynamically enable or disable it through Fleet Management remote configuration.
+kube-state-metrics:
+  # Deploy kube-state-metrics.
+  # @section kube-state-metrics
+  enabled: true
+
+# Node Exporter is used to collect metrics about the health and performance of Linux nodes in the cluster.
+# Installed by default, so you can dynamically enable or disable it through Fleet Management remote configuration.
+prometheus-node-exporter:
+  # Deploy Node Exporter.
+  # @section Node Exporter
+  enabled: true
+
+# Windows Exporter is used to collect metrics about the health and performance of Windows nodes in the cluster.
+# Not installed by default. It must be enabled before utilizing it through Fleet Management remote configuration.
+prometheus-windows-exporter:
+  # Deploy Windows Exporter.
+  # @section Windows Exporter
+  enabled: false
+
+# kepler is used to collect metrics about power usage of Kubernetes cluster resources.
+# Not installed by default. It must be enabled before utilizing it through Fleet Management remote configuration.
+kepler:
+  # Deploy Kepler.
+  # @section Kepler
+  enabled: false
+
 
 extraManifests: []

@@ -15,7 +15,7 @@ jobs:
           persist-credentials: 'false'
 
       - name: Install Task
-        uses: arduino/setup-task@b91d5d2c96a56797b48ac1e0e89220bf64044611
+        uses: arduino/setup-task@b3bbaa05e8202d1e7bd41c46e326fc0447f2e67c
         with:
           version: "3.x"
           repo-token: ${{ secrets.GITHUB_TOKEN }}

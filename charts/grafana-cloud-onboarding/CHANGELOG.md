@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+*   Update kube-state-metrics and Node Exporter (@petewall)
+
 ## 0.4.0
 
 *   Removed the "additionalComponents" chart in favor on a single chart (@petewall)

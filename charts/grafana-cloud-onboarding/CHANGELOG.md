@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+*   Enabled clustering by default (@petewall)
 *   Update kube-state-metrics and Node Exporter (@petewall)
 
 ## 0.4.0

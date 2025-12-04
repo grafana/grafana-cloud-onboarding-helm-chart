@@ -43,6 +43,9 @@ collectors:
             readOnly: false
       securityContext:
         privileged: true
+      clustering:
+        name: alloy-daemon
+        enabled: true
     controller:
       hostPID: true
       hostNetwork: true

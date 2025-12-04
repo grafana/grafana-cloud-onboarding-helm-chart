@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.4.1
 
 *   Enabled clustering by default (@petewall)
 *   Update kube-state-metrics and Node Exporter (@petewall)

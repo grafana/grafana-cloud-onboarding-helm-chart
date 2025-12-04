@@ -48,7 +48,7 @@ kind: ServiceAccount
 automountServiceAccountToken: true
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-6.4.1
+    helm.sh/chart: kube-state-metrics-6.4.2
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -65,7 +65,7 @@ metadata:
   name: test-prometheus-node-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: prometheus-node-exporter-4.49.1
+    helm.sh/chart: prometheus-node-exporter-4.49.2
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: prometheus-node-exporter
@@ -252,7 +252,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-6.4.1
+    helm.sh/chart: kube-state-metrics-6.4.2
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -483,7 +483,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-6.4.1
+    helm.sh/chart: kube-state-metrics-6.4.2
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -646,7 +646,7 @@ metadata:
   name: test-kube-state-metrics
   namespace: test-namespace
   labels:    
-    helm.sh/chart: kube-state-metrics-6.4.1
+    helm.sh/chart: kube-state-metrics-6.4.2
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -674,7 +674,7 @@ metadata:
   name: test-prometheus-node-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: prometheus-node-exporter-4.49.1
+    helm.sh/chart: prometheus-node-exporter-4.49.2
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: prometheus-node-exporter
@@ -922,7 +922,7 @@ metadata:
   name: test-prometheus-node-exporter
   namespace: test-namespace
   labels:
-    helm.sh/chart: prometheus-node-exporter-4.49.1
+    helm.sh/chart: prometheus-node-exporter-4.49.2
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: prometheus-node-exporter
@@ -944,7 +944,7 @@ spec:
       annotations:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
       labels:
-        helm.sh/chart: prometheus-node-exporter-4.49.1
+        helm.sh/chart: prometheus-node-exporter-4.49.2
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: metrics
         app.kubernetes.io/part-of: prometheus-node-exporter
@@ -1273,7 +1273,7 @@ metadata:
   name: test-kube-state-metrics
   namespace: test-namespace
   labels:    
-    helm.sh/chart: kube-state-metrics-6.4.1
+    helm.sh/chart: kube-state-metrics-6.4.2
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -1292,7 +1292,7 @@ spec:
   template:
     metadata:
       labels:        
-        helm.sh/chart: kube-state-metrics-6.4.1
+        helm.sh/chart: kube-state-metrics-6.4.2
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: metrics
         app.kubernetes.io/part-of: kube-state-metrics

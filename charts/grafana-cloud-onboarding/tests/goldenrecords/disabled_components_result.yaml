@@ -463,8 +463,8 @@ metadata:
 spec: 
   alloy:
     clustering:
-      enabled: false
-      name: ""
+      enabled: true
+      name: alloy-daemon
       portName: http
     configMap:
       content: |-

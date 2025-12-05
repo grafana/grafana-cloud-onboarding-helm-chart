@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.4.2
 
 *   Add `/sys/fs/cgroup` mount, which enables Beyla's visibility to all sockets created (@petewall)
 

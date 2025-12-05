@@ -41,6 +41,8 @@ collectors:
           - name: alloy-storage
             mountPath: /var/lib/alloy
             readOnly: false
+          - name: cgroup
+            mountPath: /sys/fs/cgroup
       securityContext:
         privileged: true
       clustering:
@@ -57,6 +59,10 @@ collectors:
             hostPath:
               path: /var/lib/alloy
               type: DirectoryOrCreate
+          - name: cgroup
+            hostPath:
+              path: /sys/fs/cgroup
+              type: Directory
 
 # The Alloy Operator is a Kubernetes Operator that manages Alloy instances and their lifecycle.
 # To see all valid settings, please see the [Alloy Operator documentation](https://github.com/grafana/alloy-operator/tree/main/charts/alloy-operator).

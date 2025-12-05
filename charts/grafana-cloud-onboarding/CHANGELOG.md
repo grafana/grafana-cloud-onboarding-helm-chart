@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+*   Add `/sys/fs/cgroup` mount, which enables Beyla's visibility to all sockets created (@petewall)
+
 ## 0.4.1
 
 *   Enabled clustering by default (@petewall)

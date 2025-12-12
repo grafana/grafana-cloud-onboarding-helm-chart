@@ -963,7 +963,7 @@ spec:
             "platform" = "kubernetes",
             "release" = "test",
             "source" = "grafana-cloud-onboarding",
-            "sourceVersion" = "0.4.2",
+            "sourceVersion" = "0.4.3",
             "workloadName" = "alloy-daemon",
             "workloadType" = "daemonset",
           }
@@ -1259,7 +1259,7 @@ metadata:
   labels:
     app.kubernetes.io/name: test-grafana-cloud-onboarding-add-finalizer
     app.kubernetes.io/instance: test
-    helm.sh/chart: grafana-cloud-onboarding-0.4.2
+    helm.sh/chart: grafana-cloud-onboarding-0.4.3
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "15"
@@ -1311,7 +1311,7 @@ metadata:
   labels:
     app.kubernetes.io/name: test-grafana-cloud-onboarding-remove-alloy-and-finalizer
     app.kubernetes.io/instance: test
-    helm.sh/chart: grafana-cloud-onboarding-0.4.2
+    helm.sh/chart: grafana-cloud-onboarding-0.4.3
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded

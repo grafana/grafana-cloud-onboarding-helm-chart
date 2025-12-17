@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.4.4
 
 *   Update Alloy Operator to 0.3.15 and Beyla Helm chart to 1.10.2 (@petewall)
 

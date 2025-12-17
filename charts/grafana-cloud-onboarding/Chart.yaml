@@ -6,11 +6,11 @@ version: 0.4.3
 appVersion: 1.16.0
 dependencies:
   - name: alloy-operator
-    version: 0.3.14
+    version: 0.3.15
     repository: https://grafana.github.io/helm-charts
     condition: alloy-operator.enabled
   - name: beyla
-    version: 1.10.0
+    version: 1.10.2
     repository: https://grafana.github.io/helm-charts
   - name: kube-state-metrics
     version: 6.4.2

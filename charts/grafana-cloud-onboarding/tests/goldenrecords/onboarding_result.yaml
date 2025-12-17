@@ -6,10 +6,10 @@ metadata:
   name: test-alloy-operator
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.13
+    helm.sh/chart: alloy-operator-0.3.15
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.4.0"
+    app.kubernetes.io/version: "1.5.1"
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
 ---
@@ -20,10 +20,10 @@ metadata:
   name: test-beyla
   namespace: test-namespace
   labels:
-    helm.sh/chart: beyla-1.10.0
+    helm.sh/chart: beyla-1.10.2
     app.kubernetes.io/name: beyla
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/version: "2.8.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: beyla
     app.kubernetes.io/component: rbac
@@ -79,10 +79,10 @@ metadata:
   name: test-beyla
   namespace: test-namespace
   labels:
-    helm.sh/chart: beyla-1.10.0
+    helm.sh/chart: beyla-1.10.2
     app.kubernetes.io/name: beyla
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/version: "2.8.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: beyla
     app.kubernetes.io/component: config
@@ -110,10 +110,10 @@ kind: ClusterRole
 metadata:
   name: test-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.3.13
+    helm.sh/chart: alloy-operator-0.3.15
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.4.0"
+    app.kubernetes.io/version: "1.5.1"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -168,10 +168,10 @@ kind: ClusterRole
 metadata:
   name: test-beyla
   labels:
-    helm.sh/chart: beyla-1.10.0
+    helm.sh/chart: beyla-1.10.2
     app.kubernetes.io/name: beyla
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/version: "2.8.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: beyla
     app.kubernetes.io/component: rbac
@@ -344,10 +344,10 @@ kind: ClusterRoleBinding
 metadata:
   name: test-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.3.13
+    helm.sh/chart: alloy-operator-0.3.15
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.4.0"
+    app.kubernetes.io/version: "1.5.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -364,10 +364,10 @@ kind: ClusterRoleBinding
 metadata:
   name: test-alloy-operator
   labels:
-    helm.sh/chart: alloy-operator-0.3.13
+    helm.sh/chart: alloy-operator-0.3.15
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.4.0"
+    app.kubernetes.io/version: "1.5.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -384,10 +384,10 @@ kind: ClusterRoleBinding
 metadata:
   name: test-beyla
   labels:
-    helm.sh/chart: beyla-1.10.0
+    helm.sh/chart: beyla-1.10.2
     app.kubernetes.io/name: beyla
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/version: "2.8.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: beyla
     app.kubernetes.io/component: rbac
@@ -429,10 +429,10 @@ metadata:
   name: test-alloy-operator-leader-election-role
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.13
+    helm.sh/chart: alloy-operator-0.3.15
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.4.0"
+    app.kubernetes.io/version: "1.5.1"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -474,10 +474,10 @@ metadata:
   name: test-alloy-operator-leader-election-rolebinding
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.13
+    helm.sh/chart: alloy-operator-0.3.15
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.4.0"
+    app.kubernetes.io/version: "1.5.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -495,10 +495,10 @@ metadata:
   name: test-alloy-operator
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.13
+    helm.sh/chart: alloy-operator-0.3.15
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.4.0"
+    app.kubernetes.io/version: "1.5.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -522,10 +522,10 @@ metadata:
   name: beyla-k8s-cache
   namespace: test-namespace
   labels:
-    helm.sh/chart: beyla-1.10.0
+    helm.sh/chart: beyla-1.10.2
     app.kubernetes.io/name: beyla-k8s-cache
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/version: "2.8.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: beyla
     app.kubernetes.io/component: networking
@@ -728,10 +728,10 @@ metadata:
   name: test-alloy-operator
   namespace: test-namespace
   labels:
-    helm.sh/chart: alloy-operator-0.3.13
+    helm.sh/chart: alloy-operator-0.3.15
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "1.4.0"
+    app.kubernetes.io/version: "1.5.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -742,10 +742,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: alloy-operator-0.3.13
+        helm.sh/chart: alloy-operator-0.3.15
         app.kubernetes.io/name: alloy-operator
         app.kubernetes.io/instance: test
-        app.kubernetes.io/version: "1.4.0"
+        app.kubernetes.io/version: "1.5.1"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: test-alloy-operator
@@ -758,7 +758,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: alloy-operator
-          image: "ghcr.io/grafana/alloy-operator:1.4.0"
+          image: "ghcr.io/grafana/alloy-operator:1.5.1"
           imagePullPolicy: IfNotPresent
           args:
             - --health-probe-bind-address=:8081
@@ -804,10 +804,10 @@ metadata:
   name: beyla-k8s-cache
   namespace: test-namespace
   labels:
-    helm.sh/chart: beyla-1.10.0
+    helm.sh/chart: beyla-1.10.2
     app.kubernetes.io/name: beyla-k8s-cache
     app.kubernetes.io/instance: test
-    app.kubernetes.io/version: "2.7.5"
+    app.kubernetes.io/version: "2.8.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: beyla
     app.kubernetes.io/component: workload
@@ -819,10 +819,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: beyla-1.10.0
+        helm.sh/chart: beyla-1.10.2
         app.kubernetes.io/name: beyla-k8s-cache
         app.kubernetes.io/instance: test
-        app.kubernetes.io/version: "2.7.5"
+        app.kubernetes.io/version: "2.8.1"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/part-of: beyla
     spec:

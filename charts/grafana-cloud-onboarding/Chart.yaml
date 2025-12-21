@@ -10,7 +10,7 @@ dependencies:
     repository: https://grafana.github.io/helm-charts
     condition: alloy-operator.enabled
   - name: beyla
-    version: 1.10.2
+    version: 1.10.4
     repository: https://grafana.github.io/helm-charts
   - name: kube-state-metrics
     version: 6.4.2

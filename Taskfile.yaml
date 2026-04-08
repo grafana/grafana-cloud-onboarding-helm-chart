@@ -9,7 +9,19 @@ tasks:
   update-deps:
     desc: Update the chart dependencies
     cmds:
+      - task: update-dependency-versions
+      - task: update-chart-dependencies
+
+  update-dependency-versions:
+    desc: Get the latest versions of the Helm chart dependencies
+    cmds:
       - ./scripts/update-dependencies.sh
+
+  update-chart-dependencies:
+    desc: Update the chart dependencies
+    dir: charts/grafana-cloud-onboarding
+    cmds:
+      - helm dependency update
 
   test:
     desc: Run all tests

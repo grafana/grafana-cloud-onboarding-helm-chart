@@ -8,9 +8,8 @@ tasks:
 
   update-deps:
     desc: Update the chart dependencies
-    dir: charts/grafana-cloud-onboarding
     cmds:
-      - helm dependency update
+      - ./scripts/update-dependencies.sh
 
   test:
     desc: Run all tests

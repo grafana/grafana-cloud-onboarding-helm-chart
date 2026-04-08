@@ -2,26 +2,26 @@ apiVersion: v2
 name: grafana-cloud-onboarding
 description: A Helm chart for Grafana Cloud Onboarding on Kubernetes
 type: application
-version: 0.4.4
+version: 0.4.5
 appVersion: 1.16.0
 dependencies:
   - name: alloy-operator
-    version: 0.3.15
+    version: 0.5.3
     repository: https://grafana.github.io/helm-charts
     condition: alloy-operator.enabled
   - name: beyla
-    version: 1.10.2
+    version: 1.16.0
     repository: https://grafana.github.io/helm-charts
   - name: kube-state-metrics
-    version: 6.4.2
+    version: 7.2.2
     repository: https://prometheus-community.github.io/helm-charts
     condition: kube-state-metrics.enabled
   - name: prometheus-node-exporter
-    version: 4.49.2
+    version: 4.53.1
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus-node-exporter.enabled
   - name: prometheus-windows-exporter
-    version: 0.12.2
+    version: 0.12.6
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus-windows-exporter.enabled
   - name: kepler

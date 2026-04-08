@@ -11,6 +11,7 @@ tasks:
     cmds:
       - task: update-dependency-versions
       - task: update-chart-dependencies
+      - task: generate-golden-records
 
   update-dependency-versions:
     desc: Get the latest versions of the Helm chart dependencies

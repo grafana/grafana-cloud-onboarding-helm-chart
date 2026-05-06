@@ -4,7 +4,7 @@ tasks:
   install-plugins:
     desc: Install required plugins
     cmds:
-      - helm plugin install https://github.com/quintush/helm-unittest || echo "Plugin already installed, skipping."
+      - helm plugin install https://github.com/helm-unittest/helm-unittest.git --verify=false --version 1.0.3 || echo "Plugin already installed, skipping."
 
   update-deps:
     desc: Update the chart dependencies

@@ -1,21 +1,21 @@
 dependencies:
 - name: alloy-operator
   repository: https://grafana.github.io/helm-charts
-  version: 0.5.5
+  version: 0.5.7
 - name: beyla
   repository: https://grafana.github.io/helm-charts
-  version: 1.16.5
+  version: 1.16.6
 - name: kube-state-metrics
   repository: https://prometheus-community.github.io/helm-charts
-  version: 7.2.2
+  version: 7.3.0
 - name: prometheus-node-exporter
   repository: https://prometheus-community.github.io/helm-charts
-  version: 4.53.1
+  version: 4.55.0
 - name: prometheus-windows-exporter
   repository: https://prometheus-community.github.io/helm-charts
   version: 0.12.6
 - name: kepler
   repository: https://sustainable-computing-io.github.io/kepler-helm-chart
   version: 0.6.1
-digest: sha256:c970e925d0753751456cf01aa74c002a88a696a6d08103f42cc4e79009c717d1
-generated: "2026-04-24T09:03:43.501371-05:00"
+digest: sha256:385f97a7e7a2fe5d377e63645c344464916d37035c3d81bd662ac875c0ebecd5
+generated: "2026-05-06T11:37:45.406449-05:00"

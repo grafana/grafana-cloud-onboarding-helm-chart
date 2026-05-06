@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.7
+
+*   Update Alloy Operator to 0.5.7, Beyla to 1.16.6, kube-state-metrics to 7.3.0, and Node Exporter to 4.55.0 (@petewall)
+
 ## 0.4.6
 
 *   Update Alloy Operator to 0.5.5 and Beyla to 1.16.5 (@petewall)

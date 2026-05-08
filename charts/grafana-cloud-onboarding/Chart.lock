@@ -4,7 +4,7 @@ dependencies:
   version: 0.5.7
 - name: beyla
   repository: https://grafana.github.io/helm-charts
-  version: 1.16.6
+  version: 1.16.7
 - name: kube-state-metrics
   repository: https://prometheus-community.github.io/helm-charts
   version: 7.3.0
@@ -17,5 +17,5 @@ dependencies:
 - name: kepler
   repository: https://sustainable-computing-io.github.io/kepler-helm-chart
   version: 0.6.1
-digest: sha256:385f97a7e7a2fe5d377e63645c344464916d37035c3d81bd662ac875c0ebecd5
-generated: "2026-05-06T11:37:45.406449-05:00"
+digest: sha256:91aff7ed5b2eeeb88d0a8395e9778f48017e25ad4ae28c98b17f1246379ee913
+generated: "2026-05-08T13:11:27.346799292Z"

@@ -1,7 +1,7 @@
 dependencies:
 - name: alloy-operator
   repository: https://grafana.github.io/helm-charts
-  version: 0.5.7
+  version: 0.5.8
 - name: beyla
   repository: https://grafana.github.io/helm-charts
   version: 1.16.6
@@ -17,5 +17,5 @@ dependencies:
 - name: kepler
   repository: https://sustainable-computing-io.github.io/kepler-helm-chart
   version: 0.6.1
-digest: sha256:385f97a7e7a2fe5d377e63645c344464916d37035c3d81bd662ac875c0ebecd5
-generated: "2026-05-06T11:37:45.406449-05:00"
+digest: sha256:090e3d3b2577e69ec03252dea6ccd0a40050c70e7054a0c4ec5469eb3559b21e
+generated: "2026-06-02T14:26:48.316661403Z"

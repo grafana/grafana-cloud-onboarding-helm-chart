@@ -10,12 +10,12 @@ dependencies:
   version: 7.3.0
 - name: prometheus-node-exporter
   repository: https://prometheus-community.github.io/helm-charts
-  version: 4.55.0
+  version: 4.57.0
 - name: prometheus-windows-exporter
   repository: https://prometheus-community.github.io/helm-charts
   version: 0.12.6
 - name: kepler
   repository: https://sustainable-computing-io.github.io/kepler-helm-chart
   version: 0.6.1
-digest: sha256:385f97a7e7a2fe5d377e63645c344464916d37035c3d81bd662ac875c0ebecd5
-generated: "2026-05-06T11:37:45.406449-05:00"
+digest: sha256:dcec44d0654ac5b1fcd155f4727a0ace209a666a1c7913d7ea6cf5f59b3c79f2
+generated: "2026-09-16T00:22:21.971833429Z"

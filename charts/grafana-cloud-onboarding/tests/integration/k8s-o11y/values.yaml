@@ -20,4 +20,4 @@ collectors:
   alloy-daemon:
     image:
       repository: grafana/alloy-dev
-      tag: latest
+      tag: latest@sha256:2611e4055cc384891fa17c4a91b029495d5743a2631c172cf406475094f45ce6
